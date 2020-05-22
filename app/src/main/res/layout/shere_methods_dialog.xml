@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageViewWhatsapp"
+        android:layout_width="190dp"
+        android:layout_height="90dp"
+        android:background="#FFFFFF"
+        android:backgroundTint="#921FA53B"
+        android:onClick="onClickWhatsapp"
+        app:srcCompat="@drawable/whatsapp" />
+
+    <ImageView
+        android:id="@+id/imageViewFacebook"
+        android:layout_width="190dp"
+        android:layout_height="80dp"
+        android:background="#0260D3"
+        android:onClick="onClickFacebook"
+        app:srcCompat="@drawable/facebook" />
+
+    <ImageView
+        android:id="@+id/imageViewInsta"
+        android:layout_width="190dp"
+        android:layout_height="80dp"
+        android:background="#C8DD16EC"
+        android:onClick="onClickInstagram"
+        app:srcCompat="@drawable/instagram" />
+
+    <ImageView
+        android:id="@+id/imageViewTwitter"
+        android:layout_width="190dp"
+        android:layout_height="80dp"
+        android:background="#0360AA"
+        android:onClick="onClickTwitter"
+        app:srcCompat="@drawable/twitter" />
+</LinearLayout>

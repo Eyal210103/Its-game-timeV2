@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".ui.Meetings.MeetingInfoFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/hows_coming_recycler"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/floatingActionButtonSpotify"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="How's Coming"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/floatingActionButtonSpotify"
+                app:layout_constraintStart_toStartOf="@+id/buttonImComingTFragment"
+                app:layout_constraintTop_toBottomOf="@+id/textViewTimerTillMeeting" />
+
+            <TextView
+                android:id="@+id/textViewTimerTillMeeting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="32dp"
+                android:text="@string/hour_fill"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="30sp"
+                app:layout_constraintStart_toEndOf="@+id/buttonImComingTFragment"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/buttonImComingTFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/main_views_design"
+                android:backgroundTint="@color/colorSecondary"
+                android:paddingHorizontal="20dp"
+                android:text="@string/i_m_coming"
+                android:textColor="#4A4A4A"
+                android:textColorHint="@color/colorAccent"
+                android:theme="@style/AppTheme"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/floatingActionButtonSpotify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/oppBackground"
+                android:src="@drawable/spotify"
+                app:fabSize="auto"
+                app:layout_constraintStart_toEndOf="@+id/textViewTimerTillMeeting"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/mapViewMeeting"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/hows_coming_recycler"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/floatingActionButtonSelectLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:src="@drawable/find"
+                android:tint="@color/oppBackground"
+                app:backgroundTint="@color/colorSecondary"
+                app:layout_constraintStart_toEndOf="@+id/floatingActionButtonSpotify"
+                app:layout_constraintTop_toTopOf="@+id/mapViewMeeting" />
+</androidx.constraintlayout.widget.ConstraintLayout>

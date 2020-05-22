@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_home_shortcuts"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup_shortcuts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView_home_shortcuts">
+
+        <RadioButton
+            android:id="@+id/radioButton_default"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingEnd="10dp"
+            android:textColor="@color/oppBackground"
+            android:text="Default"
+            tools:ignore="RtlSymmetry" />
+
+        <RadioButton
+            android:id="@+id/radioButton_all_menus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="10dp"
+            android:textColor="@color/oppBackground"
+            android:text="All Menus" />
+    </RadioGroup>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_home_groups_setting"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup_shortcuts" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup_groups"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerview_home_groups_setting">
+
+        <RadioButton
+            android:id="@+id/radioButton_all_groups"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/oppBackground"
+            android:text="All Groups" />
+
+        <RadioButton
+            android:id="@+id/radioButton_fav_groups"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/oppBackground"
+            android:text="Favorites Groups" />
+    </RadioGroup>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_home_meeting_settings"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup_groups" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup_meetings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView_home_meeting_settings">
+
+        <RadioButton
+            android:id="@+id/radioButton_all_meetings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/oppBackground"
+            android:text="All Meetings" />
+
+        <RadioButton
+            android:id="@+id/radioButton_near_meetings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/oppBackground"
+            android:text="Near Meetings" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/button_save_ui"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:textColor="@color/background"
+        android:text="Save"
+        android:backgroundTint="@color/oppBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup_meetings" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

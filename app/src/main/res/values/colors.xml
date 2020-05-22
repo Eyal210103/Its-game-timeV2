@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/colorSecondaryDark</color>
+    <color name="colorPrimaryDark">#494949</color>
+    <color name="colorAccent">#ADADAD</color>
+    <color name="colorSecondary">#FFA952</color>
+    <color name="colorSecondaryDark">#BD7123</color>
+    <color name="colorSecondaryLight">#FFD5A2</color>
+    <color name="colorAlt">#FC6A55</color>
+    <color name="blue">#2196F3</color>
+    <color name="background">#FFFFFF</color>
+    <color name="oppBackground">#494949</color>
+</resources>
+
+

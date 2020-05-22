@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:background="@color/background">
+
+    <EditText
+        android:layout_marginTop="32dp"
+        android:id="@+id/editText_email_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:hint="Email"
+        android:textColor="@color/oppBackground"
+        android:textColorHint="@color/oppBackground"
+        android:backgroundTint="@color/oppBackground"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="102dp" />
+
+    <EditText
+        android:id="@+id/editText_password_login"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="@color/oppBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Password"
+        android:textColor="@color/oppBackground"
+        android:textColorHint="@color/oppBackground"
+        android:inputType="textPassword" />
+<LinearLayout
+    android:layout_marginTop="16dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/button_cancel_login"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:background="@drawable/main_views_design"
+        android:backgroundTint="@color/colorAccent"
+        android:text="Cancel"
+        android:layout_marginHorizontal="6dp"/>
+    <Button
+        android:id="@+id/button_submit_login"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:background="@drawable/main_views_design"
+        android:layout_marginHorizontal="6dp"
+        android:text="Login"/>
+
+</LinearLayout>
+</LinearLayout>

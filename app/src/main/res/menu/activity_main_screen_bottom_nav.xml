@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/home"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/nav_myGroups"
+        android:icon="@drawable/leadership" />
+
+    <item
+        android:id="@+id/nav_find"
+        android:icon="@drawable/find"
+        android:visible="true" />
+
+    <item
+        android:id="@+id/nav_Profile"
+        android:icon="@drawable/settings"
+        android:visible="true" />
+
+</menu>

@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">Its Game Time</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="my_groups">My Groups</string>
+    <string name="title_activity_main_screen">MainScreenActivity</string>
+    <string name="facebook_app_id">653434445484076</string>
+    <string name="fb_login_protocol_scheme">fb653434445484076</string>
+
+    <string name="members">Members</string>
+    <string name="i_m_coming">I\'m Coming!</string>
+    <string name="hour_fill">10:10:10</string>
+    <string name="welcome">Welcome</string>
+    <string name="name_placeHolder">name</string>
+    <string name="logout">Logout</string>
+    <string name="submit">Submit</string>
+    <string name="persons">Persons</string>
+    <string name="groups">Groups</string>
+    <string name="i_can">I Can</string>
+    <string name="create_group">Create Group</string>
+    <string name="select_group_image">Select Group Image</string>
+    <string name="save">Save</string>
+    <string name="login">Login</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+</resources>

@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Its Game Time</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="my_groups">My Groups</string>
+    <string name="title_activity_main_screen">MainScreenActivity</string>
+    <string name="facebook_app_id">653434445484076</string>
+    <string name="fb_login_protocol_scheme">fb653434445484076</string>
+
+    <string name="members">Members</string>
+    <string name="i_m_coming">I\'m Coming!</string>
+    <string name="hour_fill">10:10:10</string>
+    <string name="welcome">Welcome</string>
+    <string name="name_placeHolder">name</string>
+    <string name="logout">Logout</string>
+    <string name="submit">Submit</string>
+    <string name="persons">Persons</string>
+    <string name="groups">Groups</string>
+
+</resources>

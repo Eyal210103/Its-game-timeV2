@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/editText_first_name_sign_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/oppBackground"
+        android:ems="10"
+        android:hint="First Name"
+        android:inputType="textPersonName"
+        android:textColorHint="@color/oppBackground" />
+
+    <EditText
+        android:id="@+id/editText_last_name_sign_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="@color/oppBackground"
+        android:ems="10"
+        android:hint="Last Name"
+        android:inputType="textPersonName"
+        android:textColorHint="@color/oppBackground" />
+
+    <EditText
+        android:id="@+id/editText_email_sign_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="@color/oppBackground"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:textColorHint="@color/oppBackground" />
+
+    <EditText
+        android:id="@+id/editText_password_sign_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="@color/oppBackground"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textColorHint="@color/oppBackground" />
+
+    <EditText
+        android:id="@+id/editText_confirm_password_sign_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="@color/oppBackground"
+        android:ems="10"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
+        android:textColorHint="@color/oppBackground" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civ_profile_sign_up"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="4dp"
+        android:src="#44ADADAD"
+        app:civ_border_color="@color/oppBackground"
+        app:civ_border_width="0.2dp" />
+
+    <Button
+        android:id="@+id/button_choose_image_sign_up"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/main_views_design"
+        android:backgroundTint="@color/colorAccent"
+        android:text="Choose Profile Image" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/button_cancel_sign_up"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:background="@drawable/main_views_design"
+            android:backgroundTint="@color/colorAccent"
+            android:text="Cancel" />
+
+        <Button
+            android:id="@+id/button_done_sign_up"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:background="@drawable/main_views_design"
+            android:text="Sign Up" />
+    </LinearLayout>
+
+</LinearLayout>
