@@ -3,6 +3,7 @@ package com.example.whosin.ui.Activities;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -35,7 +36,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener , DataLoadListener, UserMeetingsLoadListener {
 
 
-    private static final String TAG = "Home Fragment";
+    private static final String TAG = "Main Activity";
 
     UserSharedViewModel userSharedViewModel;
 
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public  ViewPager viewPager;
     public  ViewPagerAdapter adapter;
     MenuItem prevMenuItem;
+    Dialog load;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -62,6 +64,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         CircleImageView circleImageView = findViewById(R.id.toolbar_imageView);
         Glide.with(this).load(thisUser.getImageUri()).into(circleImageView);
+
+        load = new Dialog(this);
+        load.setContentView(R.layout.waiting_layout);
+        load.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        load.setCancelable(false);
+        load.show();
 
         this.share = new Dialog(this);
         this.share.setContentView(R.layout.shere_methods_dialog);
@@ -230,15 +238,20 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public void onGroupsLoaded() {
+        if (load.isShowing()){
+            load.dismiss();
+        }
         DataLoadListener home = Fragments.getHomeFragment();
         DataLoadListener myGroups = Fragments.getMyGroupsFragment();
         home.onGroupsLoaded();
         myGroups.onGroupsLoaded();
-
     }
 
     @Override
     public void onUserMeetingsLoaded() {
+        if (load.isShowing()){
+            load.dismiss();
+        }
         UserMeetingsLoadListener home = Fragments.getHomeFragment();
         home.onUserMeetingsLoaded();
     }
