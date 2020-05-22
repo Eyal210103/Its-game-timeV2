@@ -152,7 +152,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 break;
 
             case R.id.nav_Profile:
-                Log.d(TAG, "onNavigationItemSelected: ");
                     getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, Fragments.getSettingFragment(), "profile").commit();
                 break;
         }
@@ -231,8 +230,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public void onGroupsLoaded() {
-        DataLoadListener home = (DataLoadListener)Fragments.getHomeFragment();
-        DataLoadListener myGroups = (DataLoadListener)Fragments.getMyGroupsFragment();
+        DataLoadListener home = Fragments.getHomeFragment();
+        DataLoadListener myGroups = Fragments.getMyGroupsFragment();
         home.onGroupsLoaded();
         myGroups.onGroupsLoaded();
 
@@ -240,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public void onUserMeetingsLoaded() {
-        UserMeetingsLoadListener home = (UserMeetingsLoadListener)Fragments.getHomeFragment();
+        UserMeetingsLoadListener home = Fragments.getHomeFragment();
         home.onUserMeetingsLoaded();
     }
 
