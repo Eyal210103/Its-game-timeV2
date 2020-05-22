@@ -152,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 break;
 
             case R.id.nav_Profile:
+                Log.d(TAG, "onNavigationItemSelected: ");
                     getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, Fragments.getSettingFragment(), "profile").commit();
                 break;
         }
