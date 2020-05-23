@@ -16,14 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.whosin.R;
 import com.example.whosin.model.Listeners.DataLoadListener;
-import com.example.whosin.model.Objects.Group;
 import com.example.whosin.model.Objects.User;
 import com.example.whosin.model.Singleton.CurrentUser;
 import com.example.whosin.model.ViewModels.UserSharedViewModel;
 import com.example.whosin.ui.Adapters.GroupsAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.ArrayList;
 
 public class MyGroupsFragment extends Fragment implements DataLoadListener {
 
@@ -71,11 +68,16 @@ public class MyGroupsFragment extends Fragment implements DataLoadListener {
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        userSharedViewModel.getGroups().observe(getViewLifecycleOwner(), new Observer<ArrayList<Group>>() {
+        userSharedViewModel.getGroups().observe(getViewLifecycleOwner(), new Observer<Object>() {
             @Override
-            public void onChanged(ArrayList<Group> meetingToGroups) {
+            public void onChanged(Object o) {
                 adapter.notifyDataSetChanged();
+
             }
+//
+//            @Override
+//            public void onChanged(ArrayList<Group> meetingToGroups) {
+//            }
         });
 
         return view;
@@ -100,11 +102,17 @@ public class MyGroupsFragment extends Fragment implements DataLoadListener {
     @Override
     public void onGroupsLoaded() {
         try {
-            userSharedViewModel.getGroups().observe(getViewLifecycleOwner(), new Observer<ArrayList<Group>>() {
+            userSharedViewModel.getGroups().observe(getViewLifecycleOwner(), new Observer<Object>() {
                 @Override
-                public void onChanged(ArrayList<Group> meetingToGroups) {
+                public void onChanged(Object o) {
                     adapter.notifyDataSetChanged();
+
                 }
+
+//                @Override
+//                public void onChanged(ArrayList<Group> meetingToGroups) {
+//                    adapter.notifyDataSetChanged();
+//                }
             });
         }catch (Exception e){}
     }

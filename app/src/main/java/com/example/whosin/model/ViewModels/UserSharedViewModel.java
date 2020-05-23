@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 
 public class UserSharedViewModel extends ViewModel {
-    private MutableLiveData<ArrayList<Group>> groups;
+    private MutableLiveData<ArrayList<MutableLiveData<Group>>> groups;
     private MutableLiveData<ArrayList<MeetingToGroup>> meetings;
     Activity context;
 
@@ -22,7 +22,7 @@ public class UserSharedViewModel extends ViewModel {
         this.context = context;
     }
 
-    public LiveData<ArrayList<Group>> getGroups(){
+    public LiveData<ArrayList<MutableLiveData<Group>>> getGroups(){
         if (groups == null){
             groups = FirebaseActions.loadUserGroups(context);
         }
@@ -34,7 +34,7 @@ public class UserSharedViewModel extends ViewModel {
         }
         return meetings;
     }
-    public void setGroups(ArrayList<Group> groups){
+    public void setGroups(ArrayList<MutableLiveData<Group>> groups){
         this.groups.setValue(groups);
     }
 

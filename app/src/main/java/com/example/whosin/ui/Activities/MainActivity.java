@@ -30,6 +30,7 @@ import com.example.whosin.ui.ProfileInfoFragment;
 import com.example.whosin.ui.home.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -56,8 +57,30 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        final ChipNavigationBar bottomNavigationView = findViewById(R.id.bottom_nav);
+        bottomNavigationView.setItemSelected(R.id.nav_home ,true);
+        bottomNavigationView.setOnItemSelectedListener(new ChipNavigationBar.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int i) {
+                switch (i) {
+                    case R.id.nav_home:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, Fragments.getHomeFragment(), "home").commit();
+                        break;
+
+                    case R.id.nav_find:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, Fragments.getFindGroupFragment(), "find").commit();
+                        break;
+
+                    case R.id.nav_myGroups:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, Fragments.getMyGroupsFragment(), "my groups").commit();
+                        break;
+
+                    case R.id.nav_Profile:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, Fragments.getSettingFragment(), "profile").commit();
+                        break;
+                }
+            }
+        });
 
 //========================================================================================================
         User thisUser = CurrentUser.getInstance();

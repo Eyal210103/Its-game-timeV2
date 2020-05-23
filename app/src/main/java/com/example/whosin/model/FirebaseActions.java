@@ -33,10 +33,10 @@ public class FirebaseActions {
     private static FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static User thisUser = CurrentUser.getInstance();
 
-    public static MutableLiveData<ArrayList<Group>> loadUserGroups(Activity context) {
-        final ArrayList<Group> groupsObj = new ArrayList<>();
+    public static MutableLiveData<ArrayList<MutableLiveData<Group>>> loadUserGroups(Activity context) {
+        final ArrayList<MutableLiveData<Group>> groupsObj = new ArrayList<>();
         final DataLoadListener dataLoadListener = (DataLoadListener) context;
-        final MutableLiveData<ArrayList<Group>> g = new MutableLiveData<>();
+        final MutableLiveData<ArrayList<MutableLiveData<Group>>> g = new MutableLiveData<>();
         final int before = 0;
         database.getReference().child("Users").child(thisUser.getId()).child("Groups").addValueEventListener(new ValueEventListener() {
             @Override
@@ -59,17 +59,22 @@ public class FirebaseActions {
                                 Group group = dataSnapshot.getValue(Group.class);
                                 boolean isThere = false;
                                 int i = 0;
-                                for (Group g : groupsObj) {
-                                    if (g.getId().equals(group.getId())) {
-                                        groupsObj.set(i, group);
+                                for (MutableLiveData<Group> g : groupsObj) {
+                                    if (g.getValue().getId().equals(group.getId())) {
+                                        MutableLiveData<Group> mlvg = new MutableLiveData<>();
+                                        mlvg.setValue(group);
+                                        groupsObj.set(i, mlvg);
                                         dataLoadListener.onGroupsLoaded();
                                         isThere = true;
                                         break;
                                     }
                                     i++;
                                 }
-                                if (!isThere)
-                                    groupsObj.add(group);
+                                if (!isThere) {
+                                    MutableLiveData<Group> mlvg = new MutableLiveData<>();
+                                    mlvg.setValue(group);
+                                    groupsObj.add(mlvg);
+                                }
                                 dataLoadListener.onGroupsLoaded();
                             }
                             @Override
@@ -77,6 +82,7 @@ public class FirebaseActions {
 
                             }
                         });
+                        dataLoadListener.onGroupsLoaded();
                     }
                     g.setValue(groupsObj);
                     dataLoadListener.onGroupsLoaded();
@@ -87,6 +93,7 @@ public class FirebaseActions {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
+
         g.setValue(groupsObj);
         return g;
     }

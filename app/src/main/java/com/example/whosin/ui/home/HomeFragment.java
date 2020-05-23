@@ -20,7 +20,6 @@ import com.example.whosin.model.ImageResources;
 import com.example.whosin.model.Listeners.DataLoadListener;
 import com.example.whosin.model.Listeners.UserMeetingsLoadListener;
 import com.example.whosin.model.MeetingToGroup;
-import com.example.whosin.model.Objects.Group;
 import com.example.whosin.model.Objects.User;
 import com.example.whosin.model.Singleton.CurrentUser;
 import com.example.whosin.model.ViewModels.HomeViewModel;
@@ -96,10 +95,11 @@ public class HomeFragment extends Fragment implements DataLoadListener, UserMeet
     @Override
     public void onGroupsLoaded() {
         try {
-            userSharedViewModel.getGroups().observe(getViewLifecycleOwner(), new Observer<ArrayList<Group>>() {
+            userSharedViewModel.getGroups().observe(getViewLifecycleOwner(), new Observer<Object>() {
                 @Override
-                public void onChanged(ArrayList<Group> groups) {
+                public void onChanged(Object o) {
                     groupAdapter.notifyDataSetChanged();
+
                 }
             });
         }catch (Exception e){}

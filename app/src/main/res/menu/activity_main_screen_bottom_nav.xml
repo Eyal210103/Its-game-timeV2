@@ -1,23 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/nav_home"
+        android:enabled="true"
         android:icon="@drawable/home"
-        android:visible="true"/>
+        android:visible="true"
+        android:title="Home"
+        app:cnb_iconColor="@color/colorSecondary"/>
 
     <item
         android:id="@+id/nav_myGroups"
-        android:icon="@drawable/leadership" />
+        android:enabled="true"
+        android:icon="@drawable/leadership"
+        android:title="Groups"
+        app:cnb_iconColor="@color/blue"/>
 
     <item
         android:id="@+id/nav_find"
+        android:enabled="true"
         android:icon="@drawable/find"
-        android:visible="true" />
+        android:visible="true"
+        android:title="Find"
+        app:cnb_iconColor="@color/colorAlt"/>
 
     <item
         android:id="@+id/nav_Profile"
+        android:enabled="true"
         android:icon="@drawable/settings"
-        android:visible="true" />
+        android:visible="true"
+        android:title="Profile"
+        app:cnb_iconColor="@color/oppBackground"/>
 
 </menu>

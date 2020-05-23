@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -27,7 +28,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder> {
 
-    private ArrayList<Group> mGroups;
+    private ArrayList<MutableLiveData<Group>> mGroups;
     private User user;
     private Context mContext;
     private FragmentManager fragmentManager;
@@ -35,7 +36,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
 
 
 
-    public GroupsAdapter(ArrayList<Group> mGroups, User user, Context mContext, FragmentManager fragmentManager, String isThere) {
+    public GroupsAdapter(ArrayList<MutableLiveData<Group>> mGroups, User user, Context mContext, FragmentManager fragmentManager, String isThere) {
         this.mGroups = mGroups;
         this.user = user;
         this.fragmentManager = fragmentManager;
@@ -53,7 +54,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
 
-        Group group = mGroups.get(position);
+        Group group = mGroups.get(position).getValue();
         Glide.with(mContext).load(group.getImage()).into(holder.circleImageView);
         holder.textViewName.setText(group.getGroupName());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -61,7 +62,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
             public void onClick(View v) {
                 GroupInfoFragment nextFrag = new GroupInfoFragment();
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("group" , mGroups.get(position));
+                bundle.putParcelable("group" , mGroups.get(position).getValue());
                 bundle.putString("view" , isThere);
                 nextFrag.setArguments(bundle);
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -86,9 +87,6 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
         }
     }
 
-    public void setMGroups(ArrayList<Group> mGroups) {
-        this.mGroups = mGroups;
-    }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener{
         TextView textViewName , textViewSports;
@@ -108,7 +106,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
             menu.add(index,0,0,"Leave Group").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    Group group = mGroups.get(index);
+                    Group group = mGroups.get(index).getValue();
                     removeItem(index);
                     return FirebaseActions.leaveGroup(group);
                 }
