@@ -1,6 +1,7 @@
 package com.example.whosin.ui.Groups;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -41,6 +42,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -60,7 +63,7 @@ public class GroupSettingsFragment extends Fragment implements GroupParticipants
     private ParticipantAdapter adapter;
     private RecyclerView participant;
     private ListView listView;
-
+    private Bitmap bitmap;
 
 
     @Override
@@ -127,12 +130,23 @@ public class GroupSettingsFragment extends Fragment implements GroupParticipants
         if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
             Uri imageUri = data.getData();
             groupImage.setImageURI(imageUri);
+            try {
+                this.bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             changePhoto(imageUri);
         }
     }
 
     private void changePhoto(Uri imageUri){
-        mStorageRef.child("Group").child(group.getId()).putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        mStorageRef.child("Group").child(group.getId()).putBytes(data).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                 if (task.isSuccessful()){

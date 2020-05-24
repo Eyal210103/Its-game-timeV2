@@ -2,7 +2,9 @@ package com.example.whosin.ui.Groups;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,6 +34,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
@@ -46,6 +51,7 @@ public class CreateGroupDialog extends DialogFragment {
     private boolean classBoolean;
     private User thisUser;
     private Uri imageUri;
+    Bitmap bitmap;
     private View root;
 
     private FirebaseDatabase database;
@@ -127,13 +133,17 @@ public class CreateGroupDialog extends DialogFragment {
                 this.newGroup.setGroupName(name);
                 this.newGroup.setSports(sport);
                 final String groupImageURL = "https://www.liberaldictionary.com/wp-content/uploads/2018/11/null.png";
-                this.newGroup.setImage(groupImageURL);
                 final DatabaseReference ref = myRefGroups.push();
                 newGroup.setId(ref.getKey());
-                myRef.child(thisUser.getId()).child("Groups").child(newGroup.getId()).setValue(newGroup.getId());
-                ref.child("Members").child(thisUser.getId()).setValue(thisUser.getId());
+                CircleImageView selectedImage = root.findViewById(R.id.group_ImageView);
+                selectedImage.setDrawingCacheEnabled(true);
+                selectedImage.buildDrawingCache();
+                Bitmap bitmap = ((BitmapDrawable) selectedImage.getDrawable()).getBitmap();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] data = baos.toByteArray();
 
-                mStorageRef.child("Group").child(newGroup.getId()).putFile(this.imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                mStorageRef.child("Group").child(newGroup.getId()).putBytes(data).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                         if (task.isSuccessful()){
@@ -146,10 +156,16 @@ public class CreateGroupDialog extends DialogFragment {
                                         Toast.makeText(getActivity(),"Photo Wont Upload" , Toast.LENGTH_SHORT).show();
                                         newGroup.setImage(groupImageURL);
                                     }
-                                    ref.child("details").setValue(newGroup);
-                                    DataLoadListener dataLoadListener = (DataLoadListener) getActivity();
-                                    dataLoadListener.onGroupsLoaded();
-                                    dialogFragment.dismiss();
+                                    ref.child("details").setValue(newGroup).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            ref.child("Members").child(thisUser.getId()).setValue(thisUser.getId());
+                                            myRef.child(thisUser.getId()).child("Groups").child(newGroup.getId()).setValue(newGroup.getId());
+                                            DataLoadListener dataLoadListener = (DataLoadListener) getActivity();
+                                            dataLoadListener.onGroupsLoaded();
+                                            dialogFragment.dismiss();
+                                        }
+                                    });
                                 }
                             });
                         }
@@ -173,9 +189,13 @@ public class CreateGroupDialog extends DialogFragment {
             this.imageUri = data.getData();
             CircleImageView selectedImage = root.findViewById(R.id.group_ImageView);
             selectedImage.setImageURI(this.imageUri);
+            try {
+                this.bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
-
     private void onClickCancelGroup(){
         this.dismiss();
     }

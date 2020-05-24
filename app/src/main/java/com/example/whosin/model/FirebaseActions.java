@@ -60,15 +60,17 @@ public class FirebaseActions {
                                 boolean isThere = false;
                                 int i = 0;
                                 for (MutableLiveData<Group> g : groupsObj) {
-                                    if (g.getValue().getId().equals(group.getId())) {
-                                        MutableLiveData<Group> mlvg = new MutableLiveData<>();
-                                        mlvg.setValue(group);
-                                        groupsObj.set(i, mlvg);
-                                        dataLoadListener.onGroupsLoaded();
-                                        isThere = true;
-                                        break;
-                                    }
-                                    i++;
+                                    try {
+                                        if (g.getValue().getId().equals(group.getId())) {
+                                            MutableLiveData<Group> mlvg = new MutableLiveData<>();
+                                            mlvg.setValue(group);
+                                            groupsObj.set(i, mlvg);
+                                            dataLoadListener.onGroupsLoaded();
+                                            isThere = true;
+                                            break;
+                                        }
+                                        i++;
+                                    }catch (Exception ignored){}
                                 }
                                 if (!isThere) {
                                     MutableLiveData<Group> mlvg = new MutableLiveData<>();
