@@ -17,12 +17,13 @@ public class GroupInfoViewModel extends ViewModel {
     private MutableLiveData<ArrayList<ActiveMeeting>> meetings;
     private MutableLiveData<Group> group;
     private MutableLiveData<ArrayList<User>> participants;
+    Fragment context;
 
-    public void init (Fragment context, Group group){
-        meetings = FirebaseActions.loadGroupMeeting(context,group);
-        this.group= new MutableLiveData<Group>();
-        this.group.setValue(group);
-        participants= FirebaseActions.loadGroupsParticipants(group,context);
+    public void init (Fragment context, String id){
+        this.context = context;
+        this.group = FirebaseActions.getGroupById(id, context);
+        meetings = FirebaseActions.loadGroupMeeting(context, id);
+
     }
 
     public LiveData<ArrayList<ActiveMeeting>> getMeetings(){
@@ -32,6 +33,9 @@ public class GroupInfoViewModel extends ViewModel {
         return group;
     }
     public LiveData<ArrayList<User>> getParticipants() {
+        if (participants != null) {
+            participants = FirebaseActions.loadGroupsParticipants(group.getValue(), context);
+        }
         return participants;
     }
 

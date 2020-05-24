@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.whosin.R;
+import com.example.whosin.model.Listeners.DataLoadListener;
 import com.example.whosin.model.Listeners.GroupParticipantsLoadListener;
 import com.example.whosin.model.Listeners.MeetingsLoadListener;
 import com.example.whosin.model.Objects.Group;
@@ -51,7 +52,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
 
-public class GroupSettingsFragment extends Fragment implements GroupParticipantsLoadListener, MeetingsLoadListener {
+public class GroupSettingsFragment extends Fragment implements GroupParticipantsLoadListener, MeetingsLoadListener , DataLoadListener {
 
     private static final int PICK_IMAGE = 1012;
     private GroupInfoViewModel mViewModel;
@@ -73,15 +74,13 @@ public class GroupSettingsFragment extends Fragment implements GroupParticipants
         user = CurrentUser.getInstance();
         group = getArguments().getParcelable("group");
         groupInfoViewModel = ViewModelProviders.of(this).get(GroupInfoViewModel.class);
-        groupInfoViewModel.init(this,group);
+        groupInfoViewModel.init(this,group.getId());
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.group_settings_fragment, container, false);
-        group = groupInfoViewModel.getGroup().getValue();
-
         this.mStorageRef = FirebaseStorage.getInstance().getReference("Group Images");
         groupImage = root.findViewById(R.id.circleImageView_group_setting);
         Glide.with(getActivity()).load(group.getImage()).into(groupImage);
@@ -184,7 +183,7 @@ public class GroupSettingsFragment extends Fragment implements GroupParticipants
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(getActivity()).get(GroupInfoViewModel.class);
-        mViewModel.init(this,group);
+        mViewModel.init(this,group.getId());
     }
 
     @Override
@@ -243,5 +242,15 @@ public class GroupSettingsFragment extends Fragment implements GroupParticipants
             }
         };
         FirebaseDatabase.getInstance().getReference().child("Groups").child(group.getId()).child("Members").addValueEventListener(valueEventListener);
+    }
+
+    @Override
+    public void onGroupsLoaded() {
+        groupInfoViewModel.getGroup().observe(this, new Observer<Group>() {
+            @Override
+            public void onChanged(Group group1) {
+                group = group1;
+            }
+        });
     }
 }

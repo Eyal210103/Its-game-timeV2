@@ -126,11 +126,11 @@ public class FirebaseActions {
         return g;
     }
 
-    public static MutableLiveData<ArrayList<ActiveMeeting>> loadGroupMeeting(final Fragment context, Group group) {
+    public static MutableLiveData<ArrayList<ActiveMeeting>> loadGroupMeeting(final Fragment context, String id) {
         final ArrayList<ActiveMeeting> meetings = new ArrayList<ActiveMeeting>();
         final MeetingsLoadListener meetingsLoadListener = (MeetingsLoadListener) context;
         MutableLiveData<ArrayList<ActiveMeeting>> m = new MutableLiveData<>();
-        database.getReference().child("Groups").child(group.getId()).child("ActiveMeeting").addValueEventListener(new ValueEventListener() {
+        database.getReference().child("Groups").child(id).child("ActiveMeeting").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
@@ -329,5 +329,23 @@ public class FirebaseActions {
 
         u.setValue(meetings);
         return  u;
+    }
+
+    public  static MutableLiveData<Group> getGroupById(String id, Fragment context){
+        final MutableLiveData<Group> g = new MutableLiveData<>();
+        final DataLoadListener dataLoadListener = (DataLoadListener)context;
+        database.getReference().child("Groups").child(id).child("details").addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                g.setValue(dataSnapshot.getValue(Group.class));
+                dataLoadListener.onGroupsLoaded();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+        return g;
     }
 }

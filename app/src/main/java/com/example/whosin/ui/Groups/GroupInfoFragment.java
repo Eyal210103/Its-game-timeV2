@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.whosin.R;
+import com.example.whosin.model.Listeners.DataLoadListener;
 import com.example.whosin.model.Listeners.GroupParticipantsLoadListener;
 import com.example.whosin.model.Listeners.MeetingsLoadListener;
 import com.example.whosin.model.Objects.ActiveMeeting;
@@ -32,7 +33,6 @@ import com.example.whosin.model.ViewModels.GroupInfoViewModel;
 import com.example.whosin.ui.Adapters.GroupMeetingsAdapter;
 import com.example.whosin.ui.Adapters.MemberAdapter;
 import com.example.whosin.ui.Meetings.SetMeetingDialogHour;
-import com.example.whosin.ui.MembersDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class GroupInfoFragment extends Fragment implements MeetingsLoadListener , GroupParticipantsLoadListener {
+public class GroupInfoFragment extends Fragment implements MeetingsLoadListener , GroupParticipantsLoadListener, DataLoadListener {
 
 
     private static final String TAG = "Group Info";
@@ -58,7 +58,9 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener 
     private GroupInfoViewModel groupInfoViewModel;
     private GroupMeetingsAdapter meetingAdapter;
     private RecyclerView recyclerViewMeeting;
-    private GroupInfoViewModel mViewModel;
+
+    CircleImageView groupImage;
+    TextView name;
     private Fragment fragment;
 
     public GroupInfoFragment() {
@@ -74,8 +76,9 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener 
         Bundle bundle = getArguments();
         group = (Group) bundle.getSerializable("group");
         user = CurrentUser.getInstance();
-        mViewModel = ViewModelProviders.of(getActivity()).get(GroupInfoViewModel.class);
-        mViewModel.init(this,group);
+        groupInfoViewModel = ViewModelProviders.of(this).get(GroupInfoViewModel.class);
+        groupInfoViewModel.init(this,group.getId());
+
     }
 
     @Override
@@ -97,7 +100,9 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener 
     }
 
     private void loadIfUserIn() {
-        CircleImageView groupImage = root.findViewById(R.id.circleImageViewUserGroups);
+        groupImage = root.findViewById(R.id.circleImageViewUserGroups);
+        name = root.findViewById(R.id.textViewUser_GroupName);
+
         FloatingActionButton fab = root.findViewById(R.id.floatingActionButtonCreateMeet);
         FloatingActionButton fabMembers = root.findViewById(R.id.floatingActionButtonMembers);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -121,26 +126,15 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener 
             }
         });
 
-        groupInfoViewModel = ViewModelProviders.of(this).get(GroupInfoViewModel.class);
-        groupInfoViewModel.init(this,group);
 
-        final TextView name = root.findViewById(R.id.textViewUser_GroupName);
+        updateUi();
 
-        Group current = mViewModel.getGroup().getValue();
-        Glide.with(getActivity().getApplicationContext()).load(current.getImage()).into(groupImage);
-        name.setText(current.getGroupName());
-
-        recyclerViewMeeting = root.findViewById(R.id.active_meeting_view);
-        meetingAdapter = new GroupMeetingsAdapter(getContext().getApplicationContext(),getFragmentManager(), groupInfoViewModel.getMeetings().getValue(), current);
-        recyclerViewMeeting.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        recyclerViewMeeting.setAdapter(meetingAdapter);
 
         ChatFragment chatFragment = new ChatFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable("group", current);
+        bundle.putParcelable("group", group);
         chatFragment.setArguments(bundle);
         getFragmentManager().beginTransaction().replace(R.id.container_chat , chatFragment).commit();
-
 
         ImageView bigChat = root.findViewById(R.id.imageViewBigChat);
         bigChat.setOnClickListener(new View.OnClickListener() {
@@ -156,6 +150,12 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener 
                 fragmentTransaction.commit();
             }
         });
+
+        recyclerViewMeeting = root.findViewById(R.id.active_meeting_view);
+        meetingAdapter = new GroupMeetingsAdapter(getContext().getApplicationContext(),getFragmentManager(), groupInfoViewModel.getMeetings().getValue(), group);
+        recyclerViewMeeting.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewMeeting.setAdapter(meetingAdapter);
+
     }
 
     private void loadIfUserNotIn() {
@@ -241,13 +241,9 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener 
         dialog.show(getFragmentManager(), "Set Meeting");
     }
 
-    private void onClickFabMembers() {
-        MembersDialog dialog = new MembersDialog();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("group", group);
-        dialog.setArguments(bundle);
-        dialog.setTargetFragment(GroupInfoFragment.this, 2);
-        dialog.show(getFragmentManager(), "Members");
+    public void updateUi(){
+        name.setText(group.getGroupName());
+        Glide.with(getActivity()).load(group.getImage()).into(groupImage);
     }
 
     @Override
@@ -263,5 +259,16 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener 
     @Override
     public void onGroupParticipantsLoaded() {
 
+    }
+
+    @Override
+    public void onGroupsLoaded() {
+        groupInfoViewModel.getGroup().observe(this, new Observer<Group>() {
+            @Override
+            public void onChanged(Group group1) {
+                group = group1;
+                updateUi();
+            }
+        });
     }
 }
