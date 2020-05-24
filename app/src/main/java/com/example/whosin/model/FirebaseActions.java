@@ -100,11 +100,11 @@ public class FirebaseActions {
         return g;
     }
 
-    public static MutableLiveData<ArrayList<MessageChat>> loadMassages(final Fragment context, Group group) {
+    public static MutableLiveData<ArrayList<MessageChat>> loadMessages(final Fragment context, Group group) {
         final ArrayList<MessageChat> messages = new ArrayList<MessageChat>();
         final MessagesLoadListener messagesLoadListener = (MessagesLoadListener) context;
 
-        database.getReference().child("Groups").child(group.getId()).child("Chat").child("Massages").addValueEventListener(new ValueEventListener() {
+        database.getReference().child("Groups").child(group.getId()).child("Chat").child("Messages").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
@@ -261,7 +261,7 @@ public class FirebaseActions {
         } else {
             message.setHour("" + hour24hrs + ":" + minutes);
         }
-        database.getReference().child("Groups").child(group.getId()).child("Chat").child("Massages").push().setValue(message);
+        database.getReference().child("Groups").child(group.getId()).child("Chat").child("Messages").push().setValue(message);
     }
 
     public static boolean leaveGroup(Group group) {

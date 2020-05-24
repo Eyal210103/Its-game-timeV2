@@ -17,7 +17,7 @@ public class ChatViewModel extends ViewModel {
 
 
     public void init (Fragment context, Group group){
-        messages = FirebaseActions.loadMassages(context,group);
+        messages = FirebaseActions.loadMessages(context,group);
     }
     public LiveData<ArrayList<MessageChat>> getMessages(){
         return messages;
