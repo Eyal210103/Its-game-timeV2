@@ -76,7 +76,7 @@ public class HomeFragment extends Fragment implements DataLoadListener, UserMeet
         images.add(new ImageResources(R.drawable.leadership,R.drawable.gradient_back_secondery,new MyGroupsFragment()));
         images.add(new ImageResources(R.drawable.find,R.drawable.gradient_back_alt,new FindGroupFragment()));
         images.add(new ImageResources(R.drawable.settings,R.drawable.gradient_back_blue,new MyGroupsFragment()));
-
+        buttons.setNestedScrollingEnabled(false);
         buttons.setLayoutManager(horizontalLayoutManager);
         HomeImageAdapter homeImageAdapter = new HomeImageAdapter(images,getActivity(),getFragmentManager());
         buttons.setAdapter(homeImageAdapter);
