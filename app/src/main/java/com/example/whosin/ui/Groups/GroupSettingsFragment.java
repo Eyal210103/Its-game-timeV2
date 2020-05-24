@@ -1,5 +1,6 @@
 package com.example.whosin.ui.Groups;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -105,8 +106,17 @@ public class GroupSettingsFragment extends Fragment implements GroupParticipants
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setCancelable(false);
+                progressDialog.setTitle("Updating , Please Wait..");
+                progressDialog.show();
                 if (!editText.getText().toString().matches("")){
-                    FirebaseDatabase.getInstance().getReference().child("Groups").child(group.getId()).child("details").child("groupName").setValue(editText.getText().toString());
+                    FirebaseDatabase.getInstance().getReference().child("Groups").child(group.getId()).child("details").child("groupName").setValue(editText.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            progressDialog.dismiss();
+                        }
+                    });
                 }else {
                     Toast.makeText(getActivity(),"Please Type",Toast.LENGTH_SHORT).show();
                 }
@@ -135,17 +145,19 @@ public class GroupSettingsFragment extends Fragment implements GroupParticipants
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            changePhoto(imageUri);
+            changePhoto();
         }
     }
 
-    private void changePhoto(Uri imageUri){
-
-
+    private void changePhoto(){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 75, baos);
         byte[] data = baos.toByteArray();
 
+        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setCancelable(false);
+        progressDialog.setTitle("Updating , Please Wait..");
+        progressDialog.show();
         mStorageRef.child("Group").child(group.getId()).putBytes(data).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -159,6 +171,7 @@ public class GroupSettingsFragment extends Fragment implements GroupParticipants
                             }else {
                                 Toast.makeText(getActivity(),"Photo Wont Upload" , Toast.LENGTH_SHORT).show();
                             }
+                            progressDialog.dismiss();
                         }
                     });
                 }
