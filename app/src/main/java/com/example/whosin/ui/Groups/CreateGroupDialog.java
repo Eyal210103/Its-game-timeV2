@@ -1,6 +1,7 @@
 package com.example.whosin.ui.Groups;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -51,13 +52,13 @@ public class CreateGroupDialog extends DialogFragment {
     private boolean classBoolean;
     private User thisUser;
     private Uri imageUri;
-    Bitmap bitmap;
+    private Bitmap bitmap;
     private View root;
 
     private FirebaseDatabase database;
     private DatabaseReference myRefGroups , myRef;
     private StorageReference mStorageRef;
-    DialogFragment dialogFragment  = this;
+    private DialogFragment dialogFragment  = this;
 
     public CreateGroupDialog() {
     }
@@ -140,9 +141,13 @@ public class CreateGroupDialog extends DialogFragment {
                 selectedImage.buildDrawingCache();
                 Bitmap bitmap = ((BitmapDrawable) selectedImage.getDrawable()).getBitmap();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 75, baos);
                 byte[] data = baos.toByteArray();
 
+                final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setCancelable(false);
+                progressDialog.setTitle("Creating , Please Wait..");
+                progressDialog.show();
                 mStorageRef.child("Group").child(newGroup.getId()).putBytes(data).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -163,6 +168,7 @@ public class CreateGroupDialog extends DialogFragment {
                                             myRef.child(thisUser.getId()).child("Groups").child(newGroup.getId()).setValue(newGroup.getId());
                                             DataLoadListener dataLoadListener = (DataLoadListener) getActivity();
                                             dataLoadListener.onGroupsLoaded();
+                                            progressDialog.dismiss();
                                             dialogFragment.dismiss();
                                         }
                                     });

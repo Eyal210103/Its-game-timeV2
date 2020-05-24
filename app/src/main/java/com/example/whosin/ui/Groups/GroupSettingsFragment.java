@@ -143,7 +143,7 @@ public class GroupSettingsFragment extends Fragment implements GroupParticipants
 
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 75, baos);
         byte[] data = baos.toByteArray();
 
         mStorageRef.child("Group").child(group.getId()).putBytes(data).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -196,8 +196,8 @@ public class GroupSettingsFragment extends Fragment implements GroupParticipants
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<String> ids = new ArrayList<String>();
-                final ArrayList<User> users = new ArrayList<User>();
+                ArrayList<String> ids = new ArrayList<>();
+                final ArrayList<User> users = new ArrayList<>();
                 try {
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         ids.add(postSnapshot.getValue(String.class));
