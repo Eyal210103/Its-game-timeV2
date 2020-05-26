@@ -34,7 +34,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
-        android:hardwareAccelerated="false"
+        android:hardwareAccelerated="true"
         android:largeHeap="true"
         tools:replace="android:label,android:supportsRtl">
 
@@ -70,7 +70,6 @@
         <activity
             android:name=".ui.Activities.MainActivity"
             android:label="@string/title_activity_main_screen"
-            android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity android:name=".ui.Activities.SplashScreen">

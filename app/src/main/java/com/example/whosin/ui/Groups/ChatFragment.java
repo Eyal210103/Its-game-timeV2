@@ -58,6 +58,7 @@ public class ChatFragment extends Fragment  {
         final View root = inflater.inflate(R.layout.fragment_chat, container, false);
 
         recyclerView = root.findViewById(R.id.messages_view);
+        recyclerView.setHasFixedSize(true);
         editText = root.findViewById(R.id.editTextMessageText);
         ImageView send = root.findViewById(R.id.send_message_button);
 
@@ -88,7 +89,7 @@ public class ChatFragment extends Fragment  {
                 .getReference()
                 .child("Groups").child(group.getId())
                 .child("Chat")
-                .child("Massages").limitToLast(500);
+                .child("Messages").limitToLast(500);
 
         Log.d("On Bind ++++++++++", "onBindViewHolder: ");
         FirebaseRecyclerOptions<MessageChat> options =

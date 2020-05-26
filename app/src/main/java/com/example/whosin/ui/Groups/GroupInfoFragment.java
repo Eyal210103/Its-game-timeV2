@@ -258,7 +258,6 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener 
 
     @Override
     public void onGroupParticipantsLoaded() {
-
     }
 
     @Override
