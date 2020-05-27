@@ -22,13 +22,12 @@ import com.example.whosin.model.Listeners.UserMeetingsLoadListener;
 import com.example.whosin.model.MeetingToGroup;
 import com.example.whosin.model.Objects.User;
 import com.example.whosin.model.Singleton.CurrentUser;
+import com.example.whosin.model.Singleton.Fragments;
 import com.example.whosin.model.ViewModels.HomeViewModel;
 import com.example.whosin.model.ViewModels.UserSharedViewModel;
 import com.example.whosin.ui.Adapters.GroupsAdapter;
 import com.example.whosin.ui.Adapters.HomeImageAdapter;
 import com.example.whosin.ui.Adapters.UserMeetingsAdapter;
-import com.example.whosin.ui.Groups.MyGroupsFragment;
-import com.example.whosin.ui.findGroup.FindGroupFragment;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 
 import java.util.ArrayList;
@@ -73,9 +72,9 @@ public class HomeFragment extends Fragment implements DataLoadListener, UserMeet
         RecyclerView buttons = root.findViewById(R.id.recyclerview_home_buttons);
         ArrayList<ImageResources> images = new ArrayList<>();
 
-        images.add(new ImageResources(R.drawable.leadership,R.drawable.gradient_back_secondery,new MyGroupsFragment()));
-        images.add(new ImageResources(R.drawable.find,R.drawable.gradient_back_alt,new FindGroupFragment()));
-        images.add(new ImageResources(R.drawable.settings,R.drawable.gradient_back_blue,new MyGroupsFragment()));
+        images.add(new ImageResources(R.drawable.leadership,R.drawable.gradient_back_secondery, Fragments.getMyGroupsFragment()));
+        images.add(new ImageResources(R.drawable.find,R.drawable.gradient_back_alt,Fragments.getFindGroupFragment()));
+        images.add(new ImageResources(R.drawable.settings,R.drawable.gradient_back_blue,Fragments.getSettingFragment()));
         buttons.setNestedScrollingEnabled(false);
         buttons.setLayoutManager(horizontalLayoutManager);
         HomeImageAdapter homeImageAdapter = new HomeImageAdapter(images,getActivity(),getFragmentManager());

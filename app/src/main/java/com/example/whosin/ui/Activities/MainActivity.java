@@ -13,11 +13,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
-import com.bumptech.glide.Glide;
 import com.example.whosin.R;
 import com.example.whosin.model.Listeners.DataLoadListener;
 import com.example.whosin.model.Listeners.UserMeetingsLoadListener;
@@ -31,8 +29,6 @@ import com.example.whosin.ui.home.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener , DataLoadListener, UserMeetingsLoadListener {
 
@@ -53,9 +49,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+    //    Toolbar toolbar = findViewById(R.id.toolbar);
+  //      setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         final ChipNavigationBar bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setItemSelected(R.id.nav_home ,true);
@@ -85,8 +81,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 //========================================================================================================
         User thisUser = CurrentUser.getInstance();
 
-        CircleImageView circleImageView = findViewById(R.id.toolbar_imageView);
-        Glide.with(this).load(thisUser.getImageUri()).into(circleImageView);
+//        CircleImageView circleImageView = findViewById(R.id.toolbar_imageView);
+//        Glide.with(this).load(thisUser.getImageUri()).into(circleImageView);
 
         load = new Dialog(this);
         load.setContentView(R.layout.waiting_layout);

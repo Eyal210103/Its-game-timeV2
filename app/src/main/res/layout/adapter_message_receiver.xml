@@ -17,18 +17,15 @@ android:layout_height="wrap_content">
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-<!--        <de.hdodenhof.circleimageview.CircleImageView-->
-<!--            android:id="@+id/circleImageViewProfileSender"-->
-<!--            android:layout_width="35dp"-->
-<!--            android:layout_height="35dp"-->
-<!--            android:layout_marginStart="3dp"-->
-<!--            android:layout_marginTop="8dp"-->
-<!--            android:src="@mipmap/ic_launcher"-->
-<!--            app:civ_border_color="@color/colorPrimaryDark"-->
-<!--            app:civ_border_width="0.2dp"-->
-<!--            app:civ_circle_background_color="@color/colorAccent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/circleImageViewProfileSender"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@mipmap/ic_launcher"
+            app:civ_circle_background_color="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textViewMessageContextName"
@@ -39,7 +36,7 @@ android:layout_height="wrap_content">
             android:text="name "
             android:textColor="@color/background"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/circleImageViewProfileSender"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -57,6 +54,7 @@ android:layout_height="wrap_content">
             android:id="@+id/textViewContext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
             android:text=""
             android:textColor="#000000"

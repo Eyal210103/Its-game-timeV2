@@ -265,8 +265,12 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener 
         groupInfoViewModel.getGroup().observe(this, new Observer<Group>() {
             @Override
             public void onChanged(Group group1) {
-                group = group1;
-                updateUi();
+                try {
+                    group = group1;
+                    updateUi();
+                }catch (Exception e){
+
+                }
             }
         });
     }

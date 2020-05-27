@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.whosin.R;
 import com.example.whosin.model.FirebaseActions;
 import com.example.whosin.model.Objects.Group;
@@ -119,7 +120,7 @@ public class ChatFragment extends Fragment  {
                     ((ChatOwnViewHolder)holder).textViewHour.setText(model.getHour());
 
                 }else {
-                    //Glide.with(getActivity()).load(model.getImageUrl()).into(((ChatOtherViewHolder)holder).circleImageView);
+                    Glide.with(getActivity()).load(model.getImageUrl()).into(((ChatOtherViewHolder)holder).circleImageView);
                     ((ChatOtherViewHolder)holder).textViewName.setText(model.getSender());
                     ((ChatOtherViewHolder)holder).textViewContext.setText(model.getContext());
                     ((ChatOtherViewHolder)holder).textViewHour.setText(model.getHour());
@@ -170,7 +171,7 @@ class ChatOtherViewHolder extends RecyclerView.ViewHolder {
         textViewName  = itemView.findViewById(R.id.textViewMessageContextName);
         textViewContext = itemView.findViewById(R.id.textViewContext);
         textViewHour = itemView.findViewById(R.id.textViewHour);
-        //circleImageView = itemView.findViewById(R.id.circleImageViewProfileSender);
+        circleImageView = itemView.findViewById(R.id.circleImageViewProfileSender);
     }
 }
 
