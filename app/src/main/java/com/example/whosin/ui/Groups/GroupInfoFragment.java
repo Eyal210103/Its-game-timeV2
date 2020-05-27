@@ -105,6 +105,7 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener 
 
         FloatingActionButton fab = root.findViewById(R.id.floatingActionButtonCreateMeet);
         FloatingActionButton fabMembers = root.findViewById(R.id.floatingActionButtonMembers);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
