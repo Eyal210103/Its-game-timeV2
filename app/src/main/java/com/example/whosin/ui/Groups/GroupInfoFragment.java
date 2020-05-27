@@ -153,7 +153,7 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener 
         });
 
         recyclerViewMeeting = root.findViewById(R.id.active_meeting_view);
-        meetingAdapter = new GroupMeetingsAdapter(getContext().getApplicationContext(),getFragmentManager(), groupInfoViewModel.getMeetings().getValue(), group);
+        meetingAdapter = new GroupMeetingsAdapter(getContext().getApplicationContext(),this, groupInfoViewModel.getMeetings().getValue(), group);
         recyclerViewMeeting.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         recyclerViewMeeting.setAdapter(meetingAdapter);
 
