@@ -33,7 +33,6 @@ import com.example.whosin.model.ViewModels.GroupInfoViewModel;
 import com.example.whosin.ui.Adapters.GroupMeetingsAdapter;
 import com.example.whosin.ui.Adapters.MemberAdapter;
 import com.example.whosin.ui.Meetings.SetMeetingDialogHour;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -103,17 +102,17 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener 
         groupImage = root.findViewById(R.id.circleImageViewUserGroups);
         name = root.findViewById(R.id.textViewUser_GroupName);
 
-        FloatingActionButton fab = root.findViewById(R.id.floatingActionButtonCreateMeet);
-        FloatingActionButton fabMembers = root.findViewById(R.id.floatingActionButtonMembers);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickFab();
-            }
-        });
-
-        fabMembers.setOnClickListener(new View.OnClickListener() {
+//        FloatingActionButton fab = root.findViewById(R.id.floatingActionButtonCreateMeet);
+//        FloatingActionButton fabMembers = root.findViewById(R.id.floatingActionButtonMembers);
+//
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                onClickFab();
+//            }
+//        });
+//
+        groupImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 GroupSettingsFragment nextFrag = new GroupSettingsFragment();

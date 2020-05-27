@@ -10,8 +10,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/circleImageViewUserGroups"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:src="@color/colorAlt"
@@ -30,28 +30,15 @@
         app:layout_constraintStart_toStartOf="@+id/circleImageViewUserGroups"
         app:layout_constraintTop_toBottomOf="@+id/circleImageViewUserGroups" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButtonCreateMeet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/main_views_design"
-        android:backgroundTint="@color/colorAccent"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="5dp"
-        android:src="@drawable/addmeet"
-        app:layout_constraintStart_toStartOf="@+id/floatingActionButtonMembers"
-        app:layout_constraintTop_toBottomOf="@+id/floatingActionButtonMembers"
-        app:rippleColor="#00FFFFFF" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/active_meeting_view"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/container_chat"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/floatingActionButtonMembers"
-        app:layout_constraintTop_toTopOf="@+id/floatingActionButtonMembers" />
+        app:layout_constraintStart_toEndOf="@+id/circleImageViewUserGroups"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:id="@+id/container_chat"
@@ -61,7 +48,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/active_meeting_view" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewUser_GroupName"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
         android:id="@+id/imageViewBigChat"
@@ -70,18 +58,6 @@
         android:src="@android:drawable/ic_menu_directions"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/container_chat" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButtonMembers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="132dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:src="@drawable/settings"
-        app:backgroundTint="@color/colorAccent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/circleImageViewUserGroups" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
