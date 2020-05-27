@@ -2,14 +2,11 @@ package com.example.whosin.ui.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,10 +21,8 @@ import com.example.whosin.model.Singleton.CurrentUser;
 import com.example.whosin.model.Singleton.Fragments;
 import com.example.whosin.model.ViewModels.UserSharedViewModel;
 import com.example.whosin.ui.Adapters.ViewPagerAdapter;
-import com.example.whosin.ui.ProfileInfoFragment;
 import com.example.whosin.ui.home.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener , DataLoadListener, UserMeetingsLoadListener {
@@ -133,27 +128,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_settings:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, new ProfileInfoFragment()).commit();
-                return true;
-
-            case R.id.menu_logout:
-                logout();
-                return true;
-
-            case R.id.share:
-                share.show();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-
     private void setupViewPager(ViewPager viewPager) {
         adapter.addFragment(Fragments.getHomeFragment());
         adapter.addFragment(Fragments.getMyGroupsFragment());
@@ -202,58 +176,58 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     //Logout______________________________________________________________________
-    public void logout() {
-        FirebaseAuth.getInstance().signOut();
-        CurrentUser.logout();
-        Intent logScreen = new Intent(this, LoginActivity.class);
-        startActivity(logScreen);
-        finish();
-    }
+//    public void logout() {
+//        FirebaseAuth.getInstance().signOut();
+//        CurrentUser.logout();
+//        Intent logScreen = new Intent(this, LoginActivity.class);
+//        startActivity(logScreen);
+//        finish();
+//    }
 
-    public void onClickWhatsapp(View view) {
-        try {
-            Intent sharing = new Intent(Intent.ACTION_SEND);
-            sharing.setType("text/plain");
-            sharing.putExtra(Intent.EXTRA_TEXT, "Try My App" + "\n" + "https://drive.google.com/file/d/1WcOxyQLvJZQBYJ18qivyrcwHFcgoINN_/view?usp=sharing");
-            sharing.setPackage("com.whatsapp");
-            startActivity(sharing);
-        } catch (Exception e) {
-            Toast.makeText(this, "Install Whatsapp", Toast.LENGTH_SHORT).show();
-        }
-    }
-    public void onClickInstagram(View view) {
-        try {
-            Intent sharing = new Intent(Intent.ACTION_SEND);
-            sharing.setType("text/plain");
-            sharing.putExtra(Intent.EXTRA_TEXT, "Try My App" + "\n" + "https://drive.google.com/file/d/1WcOxyQLvJZQBYJ18qivyrcwHFcgoINN_/view?usp=sharing");
-            sharing.setPackage("com.instagram.android");
-            startActivity(sharing);
-        } catch (Exception e) {
-            Toast.makeText(this, "Install Instagram", Toast.LENGTH_SHORT).show();
-        }
-    }
-    public void onClickFacebook(View view) {
-        try {
-            Intent sharing = new Intent(Intent.ACTION_SEND);
-            sharing.setType("text/plain");
-            sharing.putExtra(Intent.EXTRA_TEXT, "https://drive.google.com/file/d/1WcOxyQLvJZQBYJ18qivyrcwHFcgoINN_/view?usp=sharing");
-            sharing.setPackage("com.facebook.katana");
-            startActivity(sharing);
-        } catch (Exception e) {
-            Toast.makeText(this, "Install Facebook", Toast.LENGTH_SHORT).show();
-        }
-    }
-    public void onClickTwitter(View view) {
-        try {
-            Intent sharing = new Intent(Intent.ACTION_SEND);
-            sharing.setType("text/plain");
-            sharing.putExtra(Intent.EXTRA_TEXT, "Try My App" + "\n" + "https://drive.google.com/file/d/1WcOxyQLvJZQBYJ18qivyrcwHFcgoINN_/view?usp=sharing");
-            sharing.setPackage("com.twitter.android");
-            startActivity(sharing);
-        } catch (Exception e) {
-            Toast.makeText(this, "Install Twitter", Toast.LENGTH_SHORT).show();
-        }
-    }
+//    public void onClickWhatsapp(View view) {
+//        try {
+//            Intent sharing = new Intent(Intent.ACTION_SEND);
+//            sharing.setType("text/plain");
+//            sharing.putExtra(Intent.EXTRA_TEXT, "Try My App" + "\n" + "https://drive.google.com/file/d/1WcOxyQLvJZQBYJ18qivyrcwHFcgoINN_/view?usp=sharing");
+//            sharing.setPackage("com.whatsapp");
+//            startActivity(sharing);
+//        } catch (Exception e) {
+//            Toast.makeText(this, "Install Whatsapp", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+//    public void onClickInstagram(View view) {
+//        try {
+//            Intent sharing = new Intent(Intent.ACTION_SEND);
+//            sharing.setType("text/plain");
+//            sharing.putExtra(Intent.EXTRA_TEXT, "Try My App" + "\n" + "https://drive.google.com/file/d/1WcOxyQLvJZQBYJ18qivyrcwHFcgoINN_/view?usp=sharing");
+//            sharing.setPackage("com.instagram.android");
+//            startActivity(sharing);
+//        } catch (Exception e) {
+//            Toast.makeText(this, "Install Instagram", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+//    public void onClickFacebook(View view) {
+//        try {
+//            Intent sharing = new Intent(Intent.ACTION_SEND);
+//            sharing.setType("text/plain");
+//            sharing.putExtra(Intent.EXTRA_TEXT, "https://drive.google.com/file/d/1WcOxyQLvJZQBYJ18qivyrcwHFcgoINN_/view?usp=sharing");
+//            sharing.setPackage("com.facebook.katana");
+//            startActivity(sharing);
+//        } catch (Exception e) {
+//            Toast.makeText(this, "Install Facebook", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+//    public void onClickTwitter(View view) {
+//        try {
+//            Intent sharing = new Intent(Intent.ACTION_SEND);
+//            sharing.setType("text/plain");
+//            sharing.putExtra(Intent.EXTRA_TEXT, "Try My App" + "\n" + "https://drive.google.com/file/d/1WcOxyQLvJZQBYJ18qivyrcwHFcgoINN_/view?usp=sharing");
+//            sharing.setPackage("com.twitter.android");
+//            startActivity(sharing);
+//        } catch (Exception e) {
+//            Toast.makeText(this, "Install Twitter", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     @Override
     public void onGroupsLoaded() {
