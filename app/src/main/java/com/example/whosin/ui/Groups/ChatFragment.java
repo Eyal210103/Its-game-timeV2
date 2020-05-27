@@ -141,9 +141,9 @@ public class ChatFragment extends Fragment  {
                     return TYPE_OTHER;
                 }
             }
-
         };
 
+        recyclerView.smoothScrollToPosition(adapter.getItemCount()-1);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
         //

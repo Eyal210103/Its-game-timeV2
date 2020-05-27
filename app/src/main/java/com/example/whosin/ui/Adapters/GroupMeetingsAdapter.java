@@ -152,7 +152,7 @@ public class GroupMeetingsAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    class MeetingsViewHolder extends RecyclerView.ViewHolder {
+    public static class MeetingsViewHolder extends RecyclerView.ViewHolder {
         public TextView textViewDay , textViewMonth , textViewHour;
         public MeetingsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -161,7 +161,7 @@ public class GroupMeetingsAdapter extends RecyclerView.Adapter<RecyclerView.View
             textViewHour = itemView.findViewById(R.id.textView_hour_group_adpter);
         }
     }
-    class MeetingsCreateViewHolder extends RecyclerView.ViewHolder {
+    public static class MeetingsCreateViewHolder extends RecyclerView.ViewHolder {
         public MeetingsCreateViewHolder(@NonNull View itemView) {
             super(itemView);
         }

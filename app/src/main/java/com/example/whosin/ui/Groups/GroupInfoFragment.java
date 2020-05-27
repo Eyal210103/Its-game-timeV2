@@ -1,6 +1,7 @@
 package com.example.whosin.ui.Groups;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,11 +33,15 @@ import com.example.whosin.model.Singleton.CurrentUser;
 import com.example.whosin.model.ViewModels.GroupInfoViewModel;
 import com.example.whosin.ui.Adapters.GroupMeetingsAdapter;
 import com.example.whosin.ui.Adapters.MemberAdapter;
+import com.example.whosin.ui.Meetings.MeetingInfoFragment;
 import com.example.whosin.ui.Meetings.SetMeetingDialogHour;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -44,7 +49,7 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class GroupInfoFragment extends Fragment implements MeetingsLoadListener , GroupParticipantsLoadListener, DataLoadListener {
+public class GroupInfoFragment extends Fragment implements MeetingsLoadListener, GroupParticipantsLoadListener, DataLoadListener {
 
 
     private static final String TAG = "Group Info";
@@ -76,7 +81,7 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener 
         group = (Group) bundle.getSerializable("group");
         user = CurrentUser.getInstance();
         groupInfoViewModel = ViewModelProviders.of(this).get(GroupInfoViewModel.class);
-        groupInfoViewModel.init(this,group.getId());
+        groupInfoViewModel.init(this, group.getId());
 
     }
 
@@ -102,16 +107,6 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener 
         groupImage = root.findViewById(R.id.circleImageViewUserGroups);
         name = root.findViewById(R.id.textViewUser_GroupName);
 
-//        FloatingActionButton fab = root.findViewById(R.id.floatingActionButtonCreateMeet);
-//        FloatingActionButton fabMembers = root.findViewById(R.id.floatingActionButtonMembers);
-//
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                onClickFab();
-//            }
-//        });
-//
         groupImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,7 +129,7 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener 
         Bundle bundle = new Bundle();
         bundle.putParcelable("group", group);
         chatFragment.setArguments(bundle);
-        getFragmentManager().beginTransaction().replace(R.id.container_chat , chatFragment).commit();
+        getFragmentManager().beginTransaction().replace(R.id.container_chat, chatFragment).commit();
 
         ImageView bigChat = root.findViewById(R.id.imageViewBigChat);
         bigChat.setOnClickListener(new View.OnClickListener() {
@@ -152,9 +147,8 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener 
         });
 
         recyclerViewMeeting = root.findViewById(R.id.active_meeting_view);
-        meetingAdapter = new GroupMeetingsAdapter(getContext().getApplicationContext(),this, groupInfoViewModel.getMeetings().getValue(), group);
-        recyclerViewMeeting.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        recyclerViewMeeting.setAdapter(meetingAdapter);
+       // meetingAdapter = new GroupMeetingsAdapter(getContext().getApplicationContext(), this, groupInfoViewModel.getMeetings().getValue(), group);
+        loadMeetings();
 
     }
 
@@ -182,7 +176,7 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener 
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG , user.toString());
+                Log.d(TAG, user.toString());
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Groups").child(group.getId());
                 ref.child("Members").child(user.getId()).setValue(user.getId());
                 FirebaseDatabase.getInstance().getReference().child("Users").child(user.getId()).child("Groups").child(group.getId()).setValue(group.getId());
@@ -234,14 +228,14 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener 
     private void onClickFab() {
         SetMeetingDialogHour dialog = new SetMeetingDialogHour();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("group" ,group);
-        bundle.putSerializable("user" ,user);
+        bundle.putSerializable("group", group);
+        bundle.putSerializable("user", user);
         dialog.setArguments(bundle);
         dialog.setTargetFragment(GroupInfoFragment.this, 1);
         dialog.show(getFragmentManager(), "Set Meeting");
     }
 
-    public void updateUi(){
+    public void updateUi() {
         name.setText(group.getGroupName());
         Glide.with(getActivity()).load(group.getImage()).into(groupImage);
     }
@@ -251,7 +245,7 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener 
         groupInfoViewModel.getMeetings().observe(this, new Observer<ArrayList<ActiveMeeting>>() {
             @Override
             public void onChanged(ArrayList<ActiveMeeting> activeMeetings) {
-               meetingAdapter.notifyDataSetChanged();
+                meetingAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -268,10 +262,181 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener 
                 try {
                     group = group1;
                     updateUi();
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
             }
         });
+    }
+
+    FirebaseRecyclerAdapter adapter;
+
+    public void loadMeetings() {
+        Query query = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("Groups").child(group.getId())
+                .child("ActiveMeeting");
+
+//        FirebaseRecyclerOptions<ActiveMeeting> options =
+//                new FirebaseRecyclerOptions.Builder<ActiveMeeting>().setQuery(query, new SnapshotParser<ActiveMeeting>() {
+//                    @NonNull
+//                    @Override
+//                    public ActiveMeeting parseSnapshot(@NonNull DataSnapshot snapshot) {
+//                        ActiveMeeting activeMeeting =snapshot.child(snapshot.getKey()).getValue(ActiveMeeting.class);
+//                        return activeMeeting;
+//                    }
+//                }).build();
+
+        FirebaseRecyclerOptions<ActiveMeeting> options =
+                new FirebaseRecyclerOptions.Builder<ActiveMeeting>().setQuery(query, ActiveMeeting.class).build();
+
+        adapter = new FirebaseRecyclerAdapter<ActiveMeeting, RecyclerView.ViewHolder>(options) {
+            private static final int TYPE_NORMAL = 5;
+            private static final int TYPE_OTHER = 6;
+
+            @NonNull
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                if (viewType == TYPE_NORMAL) {
+                    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_group_meetings, parent, false);
+                    return new GroupMeetingsAdapter.MeetingsViewHolder(view);
+                } else {
+                    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adpater_create_meeting_group, parent, false);
+                    return new GroupMeetingsAdapter.MeetingsCreateViewHolder(view);
+                }
+            }
+
+
+            @SuppressLint({"DefaultLocale", "SetTextI18n"})
+            @Override
+            protected void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull ActiveMeeting model) {
+                final ActiveMeeting activeMeeting = getSnapshots().get(position);
+                if (getItemViewType(position) == TYPE_NORMAL) {
+                    ((GroupMeetingsAdapter.MeetingsViewHolder) holder).textViewDay.setText("" + activeMeeting.getDay());
+                    ((GroupMeetingsAdapter.MeetingsViewHolder) holder).textViewHour.setText(String.format("%02d:%02d", activeMeeting.getHour(), activeMeeting.getMinute()));
+                    switch (activeMeeting.getMonth()) {
+                        case 1:
+                            ((GroupMeetingsAdapter.MeetingsViewHolder) holder).textViewMonth.setText("Jan");
+                            break;
+
+                        case 2:
+                            ((GroupMeetingsAdapter.MeetingsViewHolder) holder).textViewMonth.setText("Feb");
+                            break;
+
+                        case 3:
+                            ((GroupMeetingsAdapter.MeetingsViewHolder) holder).textViewMonth.setText("Mar");
+                            break;
+
+                        case 4:
+                            ((GroupMeetingsAdapter.MeetingsViewHolder) holder).textViewMonth.setText("Apr");
+                            break;
+
+                        case 5:
+                            ((GroupMeetingsAdapter.MeetingsViewHolder) holder).textViewMonth.setText("May");
+                            break;
+
+                        case 6:
+                            ((GroupMeetingsAdapter.MeetingsViewHolder) holder).textViewMonth.setText("Jun");
+                            break;
+
+                        case 7:
+                            ((GroupMeetingsAdapter.MeetingsViewHolder) holder).textViewMonth.setText("Jul");
+                            break;
+
+                        case 8:
+                            ((GroupMeetingsAdapter.MeetingsViewHolder) holder).textViewMonth.setText("Aug");
+                            break;
+
+                        case 9:
+                            ((GroupMeetingsAdapter.MeetingsViewHolder) holder).textViewMonth.setText("Sep");
+                            break;
+
+                        case 10:
+                            ((GroupMeetingsAdapter.MeetingsViewHolder) holder).textViewMonth.setText("Oct");
+                            break;
+
+                        case 11:
+                            ((GroupMeetingsAdapter.MeetingsViewHolder) holder).textViewMonth.setText("Nov");
+                            break;
+
+                        case 12:
+                            ((GroupMeetingsAdapter.MeetingsViewHolder) holder).textViewMonth.setText("Dec");
+                            break;
+                    }
+
+                    ((GroupMeetingsAdapter.MeetingsViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            MeetingInfoFragment nextFrag = new MeetingInfoFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable("meeting", activeMeeting);
+                            bundle.putParcelable("group", group);
+                            nextFrag.setArguments(bundle);
+                            fragment.getFragmentManager().beginTransaction()
+                                    .replace((R.id.container_fragments), nextFrag)
+                                    .addToBackStack("true")
+                                    .commit();
+                        }
+                    });
+                } else {
+                    ((GroupMeetingsAdapter.MeetingsCreateViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            SetMeetingDialogHour dialog = new SetMeetingDialogHour();
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("group", group);
+                            dialog.setArguments(bundle);
+                            dialog.setTargetFragment(fragment, 1);
+                            dialog.show(fragment.getFragmentManager(), "Set Meeting");
+                        }
+                    });
+                }
+            }
+
+
+            @Override
+            public int getItemCount() {
+                return getSnapshots().size();
+            }
+
+            @Override
+            public int getItemViewType(int position) {
+                if (position != 0) {
+                    return TYPE_NORMAL;
+                } else {
+                    return TYPE_OTHER;
+                }
+            }
+
+            class MeetingsViewHolder extends RecyclerView.ViewHolder {
+                public TextView textViewDay, textViewMonth, textViewHour;
+
+                public MeetingsViewHolder(@NonNull View itemView) {
+                    super(itemView);
+                    textViewMonth = itemView.findViewById(R.id.textView_month_group_adapter);
+                    textViewDay = itemView.findViewById(R.id.textView_day_group_adapter);
+                    textViewHour = itemView.findViewById(R.id.textView_hour_group_adpter);
+                }
+            }
+
+            class MeetingsCreateViewHolder extends RecyclerView.ViewHolder {
+                public MeetingsCreateViewHolder(@NonNull View itemView) {
+                    super(itemView);
+                }
+            }
+        };
+        recyclerViewMeeting.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewMeeting.setAdapter(adapter);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 }
