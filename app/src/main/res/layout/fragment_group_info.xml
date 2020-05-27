@@ -11,8 +11,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/circleImageViewUserGroups"
-        android:layout_width="125dp"
-        android:layout_height="125dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:layout_marginTop="16dp"
         android:src="@color/colorAlt"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:text="Name"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="30sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="@+id/circleImageViewUserGroups"
         app:layout_constraintStart_toStartOf="@+id/circleImageViewUserGroups"
         app:layout_constraintTop_toBottomOf="@+id/circleImageViewUserGroups" />
@@ -46,11 +46,9 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/active_meeting_view"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewUser_GroupName" />
 

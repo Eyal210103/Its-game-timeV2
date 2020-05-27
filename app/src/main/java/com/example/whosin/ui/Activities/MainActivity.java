@@ -4,14 +4,12 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.viewpager.widget.ViewPager;
 
 import com.example.whosin.R;
 import com.example.whosin.model.Listeners.DataLoadListener;
@@ -33,9 +31,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     UserSharedViewModel userSharedViewModel;
 
     private Dialog share;
-    public  ViewPager viewPager;
     public  ViewPagerAdapter adapter;
-    MenuItem prevMenuItem;
     Dialog load;
 
     @SuppressLint("SetTextI18n")
@@ -90,36 +86,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         HomeFragment homeFragment = new HomeFragment();
         Bundle bundle = new Bundle();
         homeFragment.setArguments(bundle);
-        Log.d("", "onCreate: ++++++++++" + thisUser.toString());
         getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments,Fragments.getHomeFragment()).commit();
-        //viewPager = (ViewPager) findViewById(R.id.container_fragments);
-//        adapter = new ViewPagerAdapter(getSupportFragmentManager());
-//        setupViewPager(viewPager);
-
         userSharedViewModel = ViewModelProviders.of(this).get(UserSharedViewModel.class);
         userSharedViewModel.init(this);
-//
-//        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//                if (prevMenuItem != null)
-//                    prevMenuItem.setChecked(false);
-//                else
-//                    bottomNavigationView.getMenu().getItem(0).setChecked(false);
-//                if (position < 4) {
-//                    bottomNavigationView.getMenu().getItem(position).setChecked(true);
-//                    prevMenuItem = bottomNavigationView.getMenu().getItem(position);
-//                }
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//            }
-//        });
+
     }
 
     @Override
@@ -127,15 +97,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         getMenuInflater().inflate(R.menu.main_screen, menu);
         return true;
     }
-
-    private void setupViewPager(ViewPager viewPager) {
-        adapter.addFragment(Fragments.getHomeFragment());
-        adapter.addFragment(Fragments.getMyGroupsFragment());
-        adapter.addFragment(Fragments.getFindGroupFragment());
-        adapter.addFragment(Fragments.getSettingFragment());
-        viewPager.setAdapter(adapter);
-    }
-
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -156,22 +117,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     getSupportFragmentManager().beginTransaction().replace(R.id.container_fragments, Fragments.getSettingFragment(), "profile").commit();
                 break;
         }
-//        switch (item.getItemId()) {
-//            case R.id.nav_home:
-//                viewPager.setCurrentItem(0);
-//                break;
-//            case R.id.nav_myGroups:
-//                viewPager.setCurrentItem(1);
-//
-//                break;
-//            case R.id.nav_find:
-//                viewPager.setCurrentItem(2);
-//
-//                break;
-//            case R.id.nav_Profile:
-//                viewPager.setCurrentItem(3);
-//                break;
-//        }
         return true;
     }
 
