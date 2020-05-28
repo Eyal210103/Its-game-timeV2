@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -62,9 +63,10 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener,
     private GroupInfoViewModel groupInfoViewModel;
     private GroupMeetingsAdapter meetingAdapter;
     private RecyclerView recyclerViewMeeting;
+    private FirebaseRecyclerAdapter adapter;
 
-    CircleImageView groupImage;
-    TextView name;
+    private CircleImageView groupImage;
+    private TextView name;
     private Fragment fragment;
 
     public GroupInfoFragment() {
@@ -107,21 +109,17 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener,
         groupImage = root.findViewById(R.id.group_image_tool_bar);
         name = root.findViewById(R.id.group_name_toolbar);
 
-        groupImage.setOnClickListener(new View.OnClickListener() {
+
+        androidx.appcompat.widget.Toolbar toolbar = root.findViewById(R.id.toolbar_groupinfo);
+        toolbar.setOnMenuItemClickListener(new androidx.appcompat.widget.Toolbar.OnMenuItemClickListener() {
             @Override
-            public void onClick(View view) {
-                GroupSettingsFragment nextFrag = new GroupSettingsFragment();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("group", group);
-                nextFrag.setArguments(bundle);
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.container_fragments, nextFrag);
-                fragmentTransaction.addToBackStack("true");
-                fragmentTransaction.commit();
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.menu_group_settings) {
+                    openGroupSettings();
+                }
+                return true;
             }
         });
-
-
         updateUi();
 
 
@@ -147,9 +145,10 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener,
         });
 
         recyclerViewMeeting = root.findViewById(R.id.active_meeting_view);
-       // meetingAdapter = new GroupMeetingsAdapter(getContext().getApplicationContext(), this, groupInfoViewModel.getMeetings().getValue(), group);
-        loadMeetings();
-
+        recyclerViewMeeting.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        meetingAdapter = new GroupMeetingsAdapter(getActivity(), this, groupInfoViewModel.getMeetings().getValue(), group);
+        recyclerViewMeeting.setAdapter(meetingAdapter);
+        //loadMeetings();
     }
 
     private void loadIfUserNotIn() {
@@ -225,17 +224,8 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener,
         myRefGroups.child(group.getId()).child("Members").addValueEventListener(valueEventListener);
     }
 
-    private void onClickFab() {
-        SetMeetingDialogHour dialog = new SetMeetingDialogHour();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("group", group);
-        bundle.putSerializable("user", user);
-        dialog.setArguments(bundle);
-        dialog.setTargetFragment(GroupInfoFragment.this, 1);
-        dialog.show(getFragmentManager(), "Set Meeting");
-    }
 
-    public void updateUi() {
+    private void updateUi() {
         name.setText(group.getGroupName());
         Glide.with(getActivity()).load(group.getImage()).into(groupImage);
     }
@@ -262,16 +252,14 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener,
                 try {
                     group = group1;
                     //updateUi();
-                } catch (Exception e) {
+                } catch (Exception ignored) {
 
                 }
             }
         });
     }
 
-    FirebaseRecyclerAdapter adapter;
-
-    public void loadMeetings() {
+    private void loadMeetings() {
         Query query = FirebaseDatabase.getInstance()
                 .getReference()
                 .child("Groups").child(group.getId())
@@ -289,10 +277,10 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener,
             public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 if (viewType == TYPE_NORMAL) {
                     View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_group_meetings, parent, false);
-                    return new GroupMeetingsAdapter.MeetingsViewHolder(view);
+                    return new MeetingsViewHolder(view);
                 } else {
                     View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adpater_create_meeting_group, parent, false);
-                    return new GroupMeetingsAdapter.MeetingsCreateViewHolder(view);
+                    return new MeetingsCreateViewHolder(view);
                 }
             }
 
@@ -399,9 +387,9 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener,
             }
 
             class MeetingsViewHolder extends RecyclerView.ViewHolder {
-                public TextView textViewDay, textViewMonth, textViewHour;
+                TextView textViewDay, textViewMonth, textViewHour;
 
-                public MeetingsViewHolder(@NonNull View itemView) {
+                MeetingsViewHolder(@NonNull View itemView) {
                     super(itemView);
                     textViewMonth = itemView.findViewById(R.id.textView_month_group_adapter);
                     textViewDay = itemView.findViewById(R.id.textView_day_group_adapter);
@@ -410,7 +398,7 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener,
             }
 
             class MeetingsCreateViewHolder extends RecyclerView.ViewHolder {
-                public MeetingsCreateViewHolder(@NonNull View itemView) {
+                MeetingsCreateViewHolder(@NonNull View itemView) {
                     super(itemView);
                 }
             }
@@ -419,14 +407,25 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener,
         recyclerViewMeeting.setAdapter(adapter);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        adapter.startListening();
+    private void openGroupSettings(){
+        GroupSettingsFragment nextFrag = new GroupSettingsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("group", group);
+        nextFrag.setArguments(bundle);
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.container_fragments, nextFrag);
+        fragmentTransaction.addToBackStack("true");
+        fragmentTransaction.commit();
     }
-    @Override
-    public void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
+
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        adapter.startListening();
+//    }
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        adapter.stopListening();
+//    }
 }

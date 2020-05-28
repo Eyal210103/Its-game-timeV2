@@ -9,7 +9,7 @@
     tools:context=".ui.Groups.GroupInfoFragment">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar2"
+        android:id="@+id/toolbar_groupinfo"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center_vertical"
@@ -67,7 +67,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_groupinfo" />
 
     <FrameLayout
         android:id="@+id/container_chat"
@@ -86,7 +86,8 @@
         android:layout_height="50dp"
         android:src="@android:drawable/ic_menu_directions"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/container_chat" />
+        app:layout_constraintTop_toTopOf="@+id/container_chat"
+        tools:ignore="ContentDescription" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

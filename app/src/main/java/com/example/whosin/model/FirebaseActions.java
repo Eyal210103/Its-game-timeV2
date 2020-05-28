@@ -1,7 +1,6 @@
 package com.example.whosin.model;
 
 import android.app.Activity;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -55,7 +54,6 @@ public class FirebaseActions {
                                     groups.clear();
                                     dataLoadListener.onGroupsLoaded();
                                 }
-                                Log.d(TAG, "onDataChange: "  +dataSnapshot +  dataSnapshot.getValue());
                                 Group group = dataSnapshot.getValue(Group.class);
                                 boolean isThere = false;
                                 int i = 0;
@@ -126,8 +124,9 @@ public class FirebaseActions {
         return g;
     }
 
-    public static MutableLiveData<ArrayList<ActiveMeeting>> loadGroupMeeting(final Fragment context, String id) {
+    public static MutableLiveData<ArrayList<ActiveMeeting>> loadGroupMeetingswithHolder(final Fragment context, String id) {
         final ArrayList<ActiveMeeting> meetings = new ArrayList<ActiveMeeting>();
+        meetings.add(new ActiveMeeting());
         final MeetingsLoadListener meetingsLoadListener = (MeetingsLoadListener) context;
         MutableLiveData<ArrayList<ActiveMeeting>> m = new MutableLiveData<>();
         database.getReference().child("Groups").child(id).child("ActiveMeeting").addValueEventListener(new ValueEventListener() {
@@ -177,8 +176,9 @@ public class FirebaseActions {
                                 final Group group = dataSnapshot.child("details").getValue(Group.class);
                                 boolean isThere = false;
                                 for (MeetingToGroup am : meetings) {
-                                    if (am.getMeeting().getId().equals(meeting.getId())){
+                                    if (am.getMeeting().getId().equals(meeting.getId())) {
                                         isThere = true;
+                                        break;
                                     }
                                 }
                                 if (!isThere) {
@@ -287,7 +287,6 @@ public class FirebaseActions {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 users.add(dataSnapshot.getValue(User.class));
-                                Log.d("GET DATA", "+++++++++++++++++++++++++++++++++++++++++++++" + users.toString());
                             }
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -306,7 +305,6 @@ public class FirebaseActions {
         };
         FirebaseDatabase.getInstance().getReference().child("Groups").child(group.getId()).child("Members").addValueEventListener(valueEventListener);
         u.setValue(users);
-        Log.d("GET DATA", "+++++++++++++++++++++++++++++++++++++++++++++" + users.toString());
         return u;
     }
 

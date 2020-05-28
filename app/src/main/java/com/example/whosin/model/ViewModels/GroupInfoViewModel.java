@@ -17,12 +17,12 @@ public class GroupInfoViewModel extends ViewModel {
     private MutableLiveData<ArrayList<ActiveMeeting>> meetings;
     private MutableLiveData<Group> group;
     private MutableLiveData<ArrayList<User>> participants;
-    Fragment context;
+    private Fragment context;
 
     public void init (Fragment context, String id){
         this.context = context;
         this.group = FirebaseActions.getGroupById(id, context);
-        meetings = FirebaseActions.loadGroupMeeting(context, id);
+        meetings = FirebaseActions.loadGroupMeetingswithHolder(context, id);
 
     }
 
