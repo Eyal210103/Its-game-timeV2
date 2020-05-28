@@ -29,8 +29,8 @@
         android:id="@+id/nav_Profile"
         android:enabled="true"
         android:icon="@drawable/settings"
+        android:title="@string/action_settings"
         android:visible="true"
-        android:title="Profile"
-        app:cnb_iconColor="@color/oppBackground"/>
+        app:cnb_iconColor="@color/oppBackground" />
 
 </menu>

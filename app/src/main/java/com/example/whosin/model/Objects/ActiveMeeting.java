@@ -3,7 +3,6 @@ package com.example.whosin.model.Objects;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -128,11 +127,11 @@ public class ActiveMeeting implements Serializable , Parcelable {
         dest.writeInt(this.month);
         dest.writeInt(this.year);
         dest.writeString(this.id);
-        try {
-            dest.writeBoolean(this.isOpen);
-        }catch (Exception e){
-            Log.d("TAG", "writeToParcel: " + e.toString());
-        }
+//        try {
+//            dest.writeBoolean(this.isOpen);
+//        }catch (Exception e){
+//            Log.d("TAG", "writeToParcel: " + e.toString());
+//        }
         dest.writeDouble(this.lat);
         dest.writeDouble(this.lon);
     }

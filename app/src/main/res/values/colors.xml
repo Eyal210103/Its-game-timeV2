@@ -8,6 +8,7 @@
     <color name="colorSecondaryLight">#FFD5A2</color>
     <color name="colorAlt">#FC6A55</color>
     <color name="blue">#2196F3</color>
+    <color name="toolbar">#C3C3C3</color>
     <color name="background">#FFFFFF</color>
     <color name="oppBackground">#494949</color>
 </resources>

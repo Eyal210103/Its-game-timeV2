@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -22,13 +23,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.whosin.R;
-import com.example.whosin.model.Objects.ActiveMeeting;
 import com.example.whosin.model.FirebaseActions;
 import com.example.whosin.model.GPSTracker;
-import com.example.whosin.model.Objects.Group;
 import com.example.whosin.model.Listeners.ArrivalUserListener;
-import com.example.whosin.model.Singleton.CurrentUser;
+import com.example.whosin.model.Objects.ActiveMeeting;
+import com.example.whosin.model.Objects.Group;
 import com.example.whosin.model.Objects.User;
+import com.example.whosin.model.Singleton.CurrentUser;
 import com.example.whosin.model.ViewModels.MeetingInfoViewModel;
 import com.example.whosin.ui.Adapters.ArrivalUserAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -49,6 +50,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -74,7 +76,7 @@ MeetingInfoFragment extends Fragment implements ArrivalUserListener {
     private int month;
     private int day;
     private long millSec;
-    private double lat , currentLat;
+    private double lat, currentLat;
     private double lon, currentLon;
 
     private MapView mapView;
@@ -84,7 +86,7 @@ MeetingInfoFragment extends Fragment implements ArrivalUserListener {
     private DatabaseReference reference;
 
     public MeetingInfoFragment() {
-        users =new ArrayList<User>();
+        users = new ArrayList<User>();
     }
 
     @Override
@@ -102,7 +104,7 @@ MeetingInfoFragment extends Fragment implements ArrivalUserListener {
         this.meeting = (ActiveMeeting) bundle.getSerializable("meeting");
         this.group = (Group) bundle.getSerializable("group");
         this.reference = FirebaseDatabase.getInstance().getReference().child("Groups").child(group.getId());
-        meetingInfoViewModel.init(this ,group, meeting);
+        meetingInfoViewModel.init(this, group, meeting);
 
         SharedPreferences googleBug = getActivity().getSharedPreferences("google_bug", Context.MODE_PRIVATE);
         if (!googleBug.contains("fixed")) {
@@ -112,7 +114,7 @@ MeetingInfoFragment extends Fragment implements ArrivalUserListener {
         }
 
         int year1 = meeting.getYear();
-        month = meeting.getMonth()-1;
+        month = meeting.getMonth() - 1;
         day = meeting.getDay();
         int hour1 = meeting.getHour();
         int minutes1 = meeting.getMinute();
@@ -132,9 +134,8 @@ MeetingInfoFragment extends Fragment implements ArrivalUserListener {
         this.millSec = getReminderDate();
 
 
-
         int year = meeting.getYear();
-        month = meeting.getMonth()-1;
+        month = meeting.getMonth() - 1;
         day = meeting.getDay();
         int hour = meeting.getHour();
         int minutes = meeting.getMinute();
@@ -175,6 +176,9 @@ MeetingInfoFragment extends Fragment implements ArrivalUserListener {
         this.mapView = root.findViewById(R.id.mapViewMeeting);
 
         initGoogleMap(savedInstanceState);
+
+        TextView streetView = root.findViewById(R.id.textView_street);
+       // streetView.setText(getStreetName(meeting.getLat(), meeting.getLon()));
         return root;
     }
 
@@ -196,16 +200,16 @@ MeetingInfoFragment extends Fragment implements ArrivalUserListener {
 
     private void updateCountDownText() {
 
-        String timeLeftFormatted ="";
+        String timeLeftFormatted = "";
 
-        if (mTimeLeftInMillis <= 0){
+        if (mTimeLeftInMillis <= 0) {
             timeLeftFormatted = "Have Fun!";
-        }else {
-            int hours = (int) ((mTimeLeftInMillis / 1000)/3600);
-            int minutes = (int)(((mTimeLeftInMillis / 1000)%3600) /60);
+        } else {
+            int hours = (int) ((mTimeLeftInMillis / 1000) / 3600);
+            int minutes = (int) (((mTimeLeftInMillis / 1000) % 3600) / 60);
             int seconds = (int) ((mTimeLeftInMillis / 1000) % 60);
             TimeUnit.MILLISECONDS.toMinutes(mTimeLeftInMillis);
-             timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d:%02d" , hours, minutes, seconds);
+            timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
         }
         timerTextView.setText(timeLeftFormatted);
     }
@@ -222,12 +226,13 @@ MeetingInfoFragment extends Fragment implements ArrivalUserListener {
     }
 
     private void onClickImComing() {
-        FirebaseActions.confirmUserArrival(this.group,this.meeting);
+        FirebaseActions.confirmUserArrival(this.group, this.meeting);
     }
 
-    private void loadWhoComing(){
-        this.arrivalUserAdapter = new ArrivalUserAdapter(meetingInfoViewModel.getHowComing().getValue(),getActivity());
+    private void loadWhoComing() {
+        this.arrivalUserAdapter = new ArrivalUserAdapter(meetingInfoViewModel.getHowComing().getValue(), getActivity());
         howsComing.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        //       howsComing.setLayoutManager(new GridLayoutManager(getActivity(),4));
         howsComing.setAdapter(arrivalUserAdapter);
     }
 
@@ -237,7 +242,7 @@ MeetingInfoFragment extends Fragment implements ArrivalUserListener {
         getActivity().startActivity(i);
     }
 
-    private void onClickfabLocation(){
+    private void onClickfabLocation() {
         try {
             GPSTracker gpsTracker = new GPSTracker(getActivity());
             Intent intent = new PlacePicker.IntentBuilder().onlyCoordinates(true)
@@ -247,21 +252,31 @@ MeetingInfoFragment extends Fragment implements ArrivalUserListener {
                     .showLatLong(true)
                     .build(this.getActivity());
             startActivityForResult(intent, PLACE_PICKER_CODE);
-        }catch (Exception ignored){ }
+        } catch (Exception ignored) {
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == PLACE_PICKER_CODE){
-                AddressData addressData = (AddressData) data.getParcelableExtra(Constants.ADDRESS_INTENT);
-                lat = addressData.getLatitude();
-                lon = addressData.getLongitude();
-                meeting.setLatLon(lat, lon);
-                reference.child("ActiveMeeting").child(meeting.getId()).child("lat").setValue(lat);
-                reference.child("ActiveMeeting").child(meeting.getId()).child("lon").setValue(lon);
-                LatLng loc = new LatLng(lat, lon);
-                mMap.addMarker(new MarkerOptions().position(loc).title("Meeting Location"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
+        if (requestCode == PLACE_PICKER_CODE) {
+            AddressData addressData = (AddressData) data.getParcelableExtra(Constants.ADDRESS_INTENT);
+            lat = addressData.getLatitude();
+            lon = addressData.getLongitude();
+            StringBuilder strReturnedAddress = new StringBuilder();
+            List<Address> addresses = addressData.getAddressList();
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("");
+                }
+                Toast.makeText(getActivity(), strReturnedAddress.toString(), Toast.LENGTH_SHORT).show();
+            }
+            meeting.setLatLon(lat, lon);
+            reference.child("ActiveMeeting").child(meeting.getId()).child("lat").setValue(lat);
+            reference.child("ActiveMeeting").child(meeting.getId()).child("lon").setValue(lon);
+            LatLng loc = new LatLng(lat, lon);
+            mMap.addMarker(new MarkerOptions().position(loc).title(strReturnedAddress.toString()));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
         }
     }
 
@@ -288,10 +303,33 @@ MeetingInfoFragment extends Fragment implements ArrivalUserListener {
                             .zoom(17).build();
                     //Zoom in and animate the camera.
                     mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                }catch (Exception ignored){}
+                } catch (Exception ignored) {
+                }
             }
         });
     }
+
+//    private String getStreetName(double lat, double lon) {
+//        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+//        try {
+//            List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
+//
+//            if (addresses != null) {
+//                Address returnedAddress = addresses.get(0);
+//                StringBuilder strReturnedAddress = new StringBuilder();
+//                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
+//                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("");
+//                }
+//                Toast.makeText(getActivity(), strReturnedAddress.toString(), Toast.LENGTH_SHORT).show();
+//                return strReturnedAddress.toString();
+//            } else {
+//                return "No Address returned!";
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return "Canont get Address!";
+//        }
+//    }
 
     @Override
     public void onPause() {

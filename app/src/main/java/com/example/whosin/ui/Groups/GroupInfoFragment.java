@@ -104,8 +104,8 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener,
     }
 
     private void loadIfUserIn() {
-        groupImage = root.findViewById(R.id.circleImageViewUserGroups);
-        name = root.findViewById(R.id.textViewUser_GroupName);
+        groupImage = root.findViewById(R.id.group_image_tool_bar);
+        name = root.findViewById(R.id.group_name_toolbar);
 
         groupImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -261,7 +261,7 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener,
             public void onChanged(Group group1) {
                 try {
                     group = group1;
-                    updateUi();
+                    //updateUi();
                 } catch (Exception e) {
 
                 }
@@ -276,16 +276,6 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener,
                 .getReference()
                 .child("Groups").child(group.getId())
                 .child("ActiveMeeting");
-
-//        FirebaseRecyclerOptions<ActiveMeeting> options =
-//                new FirebaseRecyclerOptions.Builder<ActiveMeeting>().setQuery(query, new SnapshotParser<ActiveMeeting>() {
-//                    @NonNull
-//                    @Override
-//                    public ActiveMeeting parseSnapshot(@NonNull DataSnapshot snapshot) {
-//                        ActiveMeeting activeMeeting =snapshot.child(snapshot.getKey()).getValue(ActiveMeeting.class);
-//                        return activeMeeting;
-//                    }
-//                }).build();
 
         FirebaseRecyclerOptions<ActiveMeeting> options =
                 new FirebaseRecyclerOptions.Builder<ActiveMeeting>().setQuery(query, ActiveMeeting.class).build();
