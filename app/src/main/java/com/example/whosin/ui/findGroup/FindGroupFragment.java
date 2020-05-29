@@ -1,9 +1,12 @@
 package com.example.whosin.ui.findGroup;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -37,10 +41,13 @@ import java.io.File;
 
 public class FindGroupFragment extends Fragment  implements GroupsLoadListener {
     private static final int PLACE_PICKER_CODE = 55;
+    private static final int REQUEST_LOCATION = 1;
     //private static final String MAPBUNDLEKEY  = "MapViewBundleKey";
     private MapView mapView;
     private GoogleMap mMap;
     private FindViewModel viewModel;
+    private double latitude = 0;
+    private double longitude = 0;
 
     public FindGroupFragment() { }
 
@@ -96,19 +103,6 @@ public class FindGroupFragment extends Fragment  implements GroupsLoadListener {
         return root;
     }
 
-
-
-    private void onClickLocationSelect(){
-        try {
-            Intent intent = new PlacePicker.IntentBuilder().onlyCoordinates(true)
-                    .setLatLong(0, 0)
-                    .setFabColor(R.color.colorSecondary)
-                    .showLatLong(true)
-                    .build(this.getActivity());
-            startActivityForResult(intent, PLACE_PICKER_CODE);
-        }catch (Exception ignored){ }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == PLACE_PICKER_CODE){
@@ -121,6 +115,38 @@ public class FindGroupFragment extends Fragment  implements GroupsLoadListener {
         }
     }
 
+    private void onClickLocationSelect() {
+        try {
+            getLocation();
+            Intent intent = new PlacePicker.IntentBuilder().onlyCoordinates(true)
+                    .setLatLong(latitude, longitude)
+                    .setMarkerDrawable(R.drawable.find)
+                    .setFabColor(R.color.colorSecondary)
+                    .showLatLong(true)
+                    .build(this.getActivity());
+            startActivityForResult(intent, PLACE_PICKER_CODE);
+        } catch (Exception ignored) {
+        }
+    }
+
+    private void getLocation() {
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(
+                getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        } else {
+            Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (locationGPS != null) {
+                double lat = locationGPS.getLatitude();
+                double longi = locationGPS.getLongitude();
+                latitude = lat;
+                longitude = longi;
+            }
+        }
+    }
+
+
     private void initGoogleMap(Bundle savedInstanceState) {
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(new OnMapReadyCallback() {
@@ -130,7 +156,6 @@ public class FindGroupFragment extends Fragment  implements GroupsLoadListener {
                 if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     googleMap.setMyLocationEnabled(true);
                     googleMap.setBuildingsEnabled(true);
-                    //googleMap.moveCamera(CameraUpdateFactory.zoomTo(10f));
                     googleMap.getUiSettings().setMyLocationButtonEnabled(true);
                 } else {
                     Toast.makeText(getActivity(), "Map Error", Toast.LENGTH_LONG).show();
@@ -192,14 +217,4 @@ public class FindGroupFragment extends Fragment  implements GroupsLoadListener {
         mapView.onStop();
     }
 
-//    public Bitmap urlToBitmap(){
-//        try {
-//            URL url = new URL("http://....");
-//            Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-//            return image;
-//        } catch(IOException e) {
-//            System.out.println(e);
-//            return null;
-//        }
-//    }
 }

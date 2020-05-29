@@ -65,7 +65,6 @@ public class SetMeetingDialogMap extends DialogFragment {
         View root = inflater.inflate(R.layout.dialod_set_meeting_map, container, false);
         
         ActivityCompat.requestPermissions( getActivity(), new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         mapView = root.findViewById(R.id.mapViewSetMeeting);
         getLocation();
         final Bundle bundle =getArguments();
@@ -176,6 +175,7 @@ public class SetMeetingDialogMap extends DialogFragment {
     }
 
     private void getLocation() {
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(
                 getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                 getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

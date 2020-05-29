@@ -1,10 +1,13 @@
 package com.example.whosin.ui.Meetings;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -24,7 +28,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.whosin.R;
 import com.example.whosin.model.FirebaseActions;
-import com.example.whosin.model.GPSTracker;
 import com.example.whosin.model.Listeners.ArrivalUserListener;
 import com.example.whosin.model.Objects.ActiveMeeting;
 import com.example.whosin.model.Objects.Group;
@@ -61,6 +64,7 @@ public class
 MeetingInfoFragment extends Fragment implements ArrivalUserListener {
 
 
+    private static final int REQUEST_LOCATION = 2;
     private static int PLACE_PICKER_CODE = 1;
 
     private ActiveMeeting meeting;
@@ -84,6 +88,7 @@ MeetingInfoFragment extends Fragment implements ArrivalUserListener {
 
     private long mTimeLeftInMillis;
     private DatabaseReference reference;
+    private double latitude = 0 ,longitude = 0;
 
     public MeetingInfoFragment() {
         users = new ArrayList<User>();
@@ -244,9 +249,9 @@ MeetingInfoFragment extends Fragment implements ArrivalUserListener {
 
     private void onClickfabLocation() {
         try {
-            GPSTracker gpsTracker = new GPSTracker(getActivity());
+            getLocation();
             Intent intent = new PlacePicker.IntentBuilder().onlyCoordinates(true)
-                    .setLatLong(gpsTracker.getLatitude(), gpsTracker.getLongitude())
+                    .setLatLong(latitude, longitude)
                     .setMarkerDrawable(R.drawable.find)
                     .setFabColor(R.color.colorSecondary)
                     .showLatLong(true)
@@ -256,6 +261,22 @@ MeetingInfoFragment extends Fragment implements ArrivalUserListener {
         }
     }
 
+    private void getLocation() {
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(
+                getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        } else {
+            Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (locationGPS != null) {
+                double lat = locationGPS.getLatitude();
+                double longi = locationGPS.getLongitude();
+                latitude = lat;
+                longitude = longi;
+            }
+        }
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == PLACE_PICKER_CODE) {
