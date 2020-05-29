@@ -50,18 +50,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/editTextMessageText" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/messages_view"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_chat"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:divider="@null"
-        android:dividerHeight="0dp"
         app:layout_constraintBottom_toTopOf="@+id/editTextMessageText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/messages_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/editTextMessageText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

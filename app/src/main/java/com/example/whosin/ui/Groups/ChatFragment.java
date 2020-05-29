@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.whosin.R;
@@ -37,11 +38,12 @@ public class ChatFragment extends Fragment  {
 
     private EditText editText;
     private Group group;
+    private int amountOfM;
     private User user;
     //private ChatViewModel chatViewModel;
     FirebaseRecyclerAdapter adapter;
     private RecyclerView recyclerView;
-
+    SwipeRefreshLayout swipeRefreshLayout;
 
     public ChatFragment() {
     }
@@ -59,12 +61,12 @@ public class ChatFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_chat, container, false);
-
+        amountOfM = 200;
         recyclerView = root.findViewById(R.id.messages_view);
+        swipeRefreshLayout = root.findViewById(R.id.refresh_chat);
         recyclerView.setHasFixedSize(true);
         editText = root.findViewById(R.id.editTextMessageText);
         ImageView send = root.findViewById(R.id.send_message_button);
-
         loadMessages();
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,17 +84,26 @@ public class ChatFragment extends Fragment  {
             }
 
         });
-//        recyclerView.smoothScrollToPosition(adapter.getItemCount()-1);
+
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                amountOfM += 200;
+                loadMessages();
+            }
+        });
         return root;
     }
 
 
     private void loadMessages() {
+
         Query query = FirebaseDatabase.getInstance()
                 .getReference()
                 .child("Groups").child(group.getId())
                 .child("Chat")
-                .child("Messages").limitToLast(500);
+                .child("Messages").limitToLast(amountOfM);
 
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -155,13 +166,16 @@ public class ChatFragment extends Fragment  {
                 }
             }
         };
+        adapter.startListening();
 
-        recyclerView.smoothScrollToPosition(adapter.getItemCount()-1);
+        recyclerView.smoothScrollToPosition(adapter.getItemCount());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
         try {
-            recyclerView.smoothScrollToPosition(adapter.getItemCount()-1);
+            recyclerView.smoothScrollToPosition(adapter.getItemCount());
         }catch (Exception ignored){}
+        swipeRefreshLayout.setRefreshing(false);
+        adapter.notifyDataSetChanged();
         //
     }
 
