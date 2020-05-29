@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.whosin.R;
-import com.example.whosin.model.Listeners.DataLoadListener;
+import com.example.whosin.model.Listeners.GroupsLoadListener;
 import com.example.whosin.model.Listeners.GroupParticipantsLoadListener;
 import com.example.whosin.model.Listeners.MeetingsLoadListener;
 import com.example.whosin.model.Objects.Group;
@@ -52,7 +52,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
 
-public class GroupSettingsFragment extends Fragment implements GroupParticipantsLoadListener, MeetingsLoadListener , DataLoadListener {
+public class GroupSettingsFragment extends Fragment implements GroupParticipantsLoadListener, MeetingsLoadListener , GroupsLoadListener {
 
     private static final int PICK_IMAGE = 1012;
     private GroupInfoViewModel mViewModel;

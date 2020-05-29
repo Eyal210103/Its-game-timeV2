@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.whosin.R;
-import com.example.whosin.model.Listeners.DataLoadListener;
+import com.example.whosin.model.Listeners.GroupsLoadListener;
 import com.example.whosin.model.Objects.SingleMeeting;
 import com.example.whosin.model.ViewModels.FindViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -35,7 +35,7 @@ import com.sucho.placepicker.PlacePicker;
 
 import java.io.File;
 
-public class FindGroupFragment extends Fragment  implements DataLoadListener {
+public class FindGroupFragment extends Fragment  implements GroupsLoadListener {
     private static final int PLACE_PICKER_CODE = 55;
     //private static final String MAPBUNDLEKEY  = "MapViewBundleKey";
     private MapView mapView;

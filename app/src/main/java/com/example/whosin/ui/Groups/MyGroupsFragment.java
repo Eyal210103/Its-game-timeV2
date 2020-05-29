@@ -15,14 +15,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.whosin.R;
-import com.example.whosin.model.Listeners.DataLoadListener;
+import com.example.whosin.model.Listeners.GroupsLoadListener;
 import com.example.whosin.model.Objects.User;
 import com.example.whosin.model.Singleton.CurrentUser;
 import com.example.whosin.model.ViewModels.UserSharedViewModel;
 import com.example.whosin.ui.Adapters.GroupsAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class MyGroupsFragment extends Fragment implements DataLoadListener {
+public class MyGroupsFragment extends Fragment implements GroupsLoadListener {
 
     private static final int PICK_IMAGE = 102;
 

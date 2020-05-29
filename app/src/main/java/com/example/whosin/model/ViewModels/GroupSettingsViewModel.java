@@ -16,7 +16,7 @@ public class GroupSettingsViewModel extends ViewModel {
 
     public void init(Fragment context, Group group) {
         if (participants == null){
-            participants= FirebaseActions.loadGroupsParticipants(group,context);
+            participants= FirebaseActions.loadGroupsParticipants(group.getId(),context);
         }
     }
     public LiveData<ArrayList<User>> getParticipants() {

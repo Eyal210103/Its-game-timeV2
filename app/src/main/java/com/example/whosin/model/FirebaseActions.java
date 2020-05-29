@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.whosin.model.Listeners.ArrivalUserListener;
-import com.example.whosin.model.Listeners.DataLoadListener;
+import com.example.whosin.model.Listeners.GroupsLoadListener;
 import com.example.whosin.model.Listeners.GroupParticipantsLoadListener;
 import com.example.whosin.model.Listeners.MeetingsLoadListener;
 import com.example.whosin.model.Listeners.MessagesLoadListener;
@@ -35,7 +35,7 @@ public class FirebaseActions {
 
     public static MutableLiveData<ArrayList<MutableLiveData<Group>>> loadUserGroups(Activity context) {
         final ArrayList<MutableLiveData<Group>> groupsObj = new ArrayList<>();
-        final DataLoadListener dataLoadListener = (DataLoadListener) context;
+        final GroupsLoadListener groupsLoadListener = (GroupsLoadListener) context;
         final MutableLiveData<ArrayList<MutableLiveData<Group>>> g = new MutableLiveData<>();
         final int before = 0;
         database.getReference().child("Users").child(thisUser.getId()).child("Groups").addValueEventListener(new ValueEventListener() {
@@ -53,7 +53,7 @@ public class FirebaseActions {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if (before > groups.size()){
                                     groups.clear();
-                                    dataLoadListener.onGroupsLoaded();
+                                    groupsLoadListener.onGroupsLoaded();
                                 }
                                 Group group = dataSnapshot.getValue(Group.class);
                                 boolean isThere = false;
@@ -64,7 +64,7 @@ public class FirebaseActions {
                                             MutableLiveData<Group> mlvg = new MutableLiveData<>();
                                             mlvg.setValue(group);
                                             groupsObj.set(i, mlvg);
-                                            dataLoadListener.onGroupsLoaded();
+                                            groupsLoadListener.onGroupsLoaded();
                                             isThere = true;
                                             break;
                                         }
@@ -76,17 +76,17 @@ public class FirebaseActions {
                                     mlvg.setValue(group);
                                     groupsObj.add(mlvg);
                                 }
-                                dataLoadListener.onGroupsLoaded();
+                                groupsLoadListener.onGroupsLoaded();
                             }
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
 
                             }
                         });
-                        dataLoadListener.onGroupsLoaded();
+                        groupsLoadListener.onGroupsLoaded();
                     }
                     g.setValue(groupsObj);
-                    dataLoadListener.onGroupsLoaded();
+                    groupsLoadListener.onGroupsLoaded();
                 } catch (Exception ignored) {
                 }
             }
@@ -271,7 +271,7 @@ public class FirebaseActions {
                 database.getReference().child("Groups").child(group.getId()).child("Members").child(thisUser.getId()).removeValue().isSuccessful();
     }
 
-    public static MutableLiveData<ArrayList<User>> loadGroupsParticipants(Group group , final Fragment context){
+    public static MutableLiveData<ArrayList<User>> loadGroupsParticipants(String  group , final Fragment context){
         final ArrayList<User> users = new ArrayList<>();
         final GroupParticipantsLoadListener groupParticipantsLoadListener = (GroupParticipantsLoadListener)context;
         final MutableLiveData<ArrayList<User>> u = new MutableLiveData<>();
@@ -289,6 +289,7 @@ public class FirebaseActions {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 users.add(dataSnapshot.getValue(User.class));
+                                groupParticipantsLoadListener.onGroupParticipantsLoaded();
                             }
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -296,7 +297,6 @@ public class FirebaseActions {
                             }
                         });
                     }
-                    groupParticipantsLoadListener.onGroupParticipantsLoaded();
                 } catch (Exception ignored) {
                 }
             }
@@ -305,7 +305,7 @@ public class FirebaseActions {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         };
-        FirebaseDatabase.getInstance().getReference().child("Groups").child(group.getId()).child("Members").addValueEventListener(valueEventListener);
+        FirebaseDatabase.getInstance().getReference().child("Groups").child(group).child("Members").addValueEventListener(valueEventListener);
         u.setValue(users);
         return u;
     }
@@ -313,14 +313,14 @@ public class FirebaseActions {
     public static MutableLiveData<ArrayList<SingleMeeting>>loadAllSingleMeetings(Fragment context){
         final ArrayList<SingleMeeting> meetings = new ArrayList<>();
         final MutableLiveData<ArrayList<SingleMeeting>> u = new MutableLiveData<>();
-        final DataLoadListener dataLoadListener = (DataLoadListener)context;
+        final GroupsLoadListener groupsLoadListener = (GroupsLoadListener)context;
         database.getReference().child("Meetings").child("SingleMeetings").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds: dataSnapshot.getChildren()) {
                     meetings.add(ds.getValue(SingleMeeting.class));
                 }
-                dataLoadListener.onGroupsLoaded();
+                groupsLoadListener.onGroupsLoaded();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -333,13 +333,13 @@ public class FirebaseActions {
 
     public  static MutableLiveData<Group> getGroupById(String id, Fragment context){
         final MutableLiveData<Group> g = new MutableLiveData<>();
-        final DataLoadListener dataLoadListener = (DataLoadListener)context;
+        final GroupsLoadListener groupsLoadListener = (GroupsLoadListener)context;
         database.getReference().child("Groups").child(id).child("details").addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 g.setValue(dataSnapshot.getValue(Group.class));
-                dataLoadListener.onGroupsLoaded();
+                groupsLoadListener.onGroupsLoaded();
             }
 
             @Override

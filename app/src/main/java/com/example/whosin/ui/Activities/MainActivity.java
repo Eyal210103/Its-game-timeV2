@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.whosin.R;
-import com.example.whosin.model.Listeners.DataLoadListener;
+import com.example.whosin.model.Listeners.GroupsLoadListener;
 import com.example.whosin.model.Listeners.UserMeetingsLoadListener;
 import com.example.whosin.model.Objects.User;
 import com.example.whosin.model.Singleton.CurrentUser;
@@ -23,7 +23,7 @@ import com.example.whosin.ui.home.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener , DataLoadListener, UserMeetingsLoadListener {
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener , GroupsLoadListener, UserMeetingsLoadListener {
 
 
     private static final String TAG = "Main Activity";
@@ -179,8 +179,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         if (load.isShowing()){
             load.dismiss();
         }
-        DataLoadListener home = Fragments.getHomeFragment();
-        DataLoadListener myGroups = Fragments.getMyGroupsFragment();
+        GroupsLoadListener home = Fragments.getHomeFragment();
+        GroupsLoadListener myGroups = Fragments.getMyGroupsFragment();
         home.onGroupsLoaded();
         myGroups.onGroupsLoaded();
     }

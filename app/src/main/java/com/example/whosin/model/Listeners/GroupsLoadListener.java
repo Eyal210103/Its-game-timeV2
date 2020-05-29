@@ -1,5 +1,5 @@
 package com.example.whosin.model.Listeners;
 
-public interface DataLoadListener {
+public interface GroupsLoadListener {
     void onGroupsLoaded();
 }

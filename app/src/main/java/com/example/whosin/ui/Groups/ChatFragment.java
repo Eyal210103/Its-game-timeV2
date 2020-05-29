@@ -1,7 +1,6 @@
 package com.example.whosin.ui.Groups;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +24,11 @@ import com.example.whosin.model.Singleton.CurrentUser;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -92,7 +94,19 @@ public class ChatFragment extends Fragment  {
                 .child("Chat")
                 .child("Messages").limitToLast(500);
 
-        Log.d("On Bind ++++++++++", "onBindViewHolder: ");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                try {
+                    recyclerView.smoothScrollToPosition(adapter.getItemCount());
+                }catch (Exception ignored){}
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         FirebaseRecyclerOptions<MessageChat> options =
                 new FirebaseRecyclerOptions.Builder<MessageChat>().setQuery(query,MessageChat.class).build();
 
@@ -114,7 +128,6 @@ public class ChatFragment extends Fragment  {
 
             @Override
             protected void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull final MessageChat model) {
-                Log.d("On Bind ++++++++++", "onBindViewHolder: " + model.toString());
                 if (getItemViewType(position) == TYPE_OWN) {
                     ((ChatOwnViewHolder)holder).textViewContext.setText(model.getContext());
                     ((ChatOwnViewHolder)holder).textViewHour.setText(model.getHour());
@@ -146,6 +159,9 @@ public class ChatFragment extends Fragment  {
         recyclerView.smoothScrollToPosition(adapter.getItemCount()-1);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
+        try {
+            recyclerView.smoothScrollToPosition(adapter.getItemCount()-1);
+        }catch (Exception ignored){}
         //
     }
 

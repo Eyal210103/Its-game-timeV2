@@ -23,7 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.whosin.R;
-import com.example.whosin.model.Listeners.DataLoadListener;
+import com.example.whosin.model.Listeners.GroupsLoadListener;
 import com.example.whosin.model.Objects.Group;
 import com.example.whosin.model.Objects.User;
 import com.example.whosin.model.Singleton.CurrentUser;
@@ -166,8 +166,8 @@ public class CreateGroupDialog extends DialogFragment {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             ref.child("Members").child(thisUser.getId()).setValue(thisUser.getId());
                                             myRef.child(thisUser.getId()).child("Groups").child(newGroup.getId()).setValue(newGroup.getId());
-                                            DataLoadListener dataLoadListener = (DataLoadListener) getActivity();
-                                            dataLoadListener.onGroupsLoaded();
+                                            GroupsLoadListener groupsLoadListener = (GroupsLoadListener) getActivity();
+                                            groupsLoadListener.onGroupsLoaded();
                                             progressDialog.dismiss();
                                             dialogFragment.dismiss();
                                         }

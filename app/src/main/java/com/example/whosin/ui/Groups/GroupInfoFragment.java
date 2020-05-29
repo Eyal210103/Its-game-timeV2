@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.whosin.R;
-import com.example.whosin.model.Listeners.DataLoadListener;
+import com.example.whosin.model.Listeners.GroupsLoadListener;
 import com.example.whosin.model.Listeners.GroupParticipantsLoadListener;
 import com.example.whosin.model.Listeners.MeetingsLoadListener;
 import com.example.whosin.model.Objects.ActiveMeeting;
@@ -50,7 +50,7 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class GroupInfoFragment extends Fragment implements MeetingsLoadListener, GroupParticipantsLoadListener, DataLoadListener {
+public class GroupInfoFragment extends Fragment implements MeetingsLoadListener, GroupParticipantsLoadListener, GroupsLoadListener {
 
 
     private static final String TAG = "Group Info";
@@ -66,6 +66,7 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener,
     private FirebaseRecyclerAdapter adapter;
 
     private CircleImageView groupImage;
+    private TextView textViewParticipant;
     private TextView name;
     private Fragment fragment;
 
@@ -154,6 +155,19 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener,
         recyclerViewMeeting.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         meetingAdapter = new GroupMeetingsAdapter(getActivity(), this, groupInfoViewModel.getMeetings().getValue(), group);
         recyclerViewMeeting.setAdapter(meetingAdapter);
+
+        textViewParticipant = root.findViewById(R.id.textView_participants);
+        int countSize = 0;
+        StringBuilder part = new StringBuilder();
+        for (int i = 0; i < groupInfoViewModel.getParticipants().getValue().size(); i++) {
+            if (countSize < 30){
+                part.append(groupInfoViewModel.getParticipants().getValue().get(i).getFullName()).append(",");
+                countSize = part.length();
+            }else
+                break;
+        }
+        part.append("....");
+        textViewParticipant.setText(part.toString());
         //loadMeetings();
     }
 
@@ -230,7 +244,6 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener,
         myRefGroups.child(group.getId()).child("Members").addValueEventListener(valueEventListener);
     }
 
-
     private void updateUi() {
         name.setText(group.getGroupName());
         Glide.with(getActivity()).load(group.getImage()).into(groupImage);
@@ -248,6 +261,21 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener,
 
     @Override
     public void onGroupParticipantsLoaded() {
+        try {
+            int countSize = 0;
+            StringBuilder part = new StringBuilder();
+            for (int i = 0; i < groupInfoViewModel.getParticipants().getValue().size(); i++) {
+                if (countSize < 30){
+                    part.append(groupInfoViewModel.getParticipants().getValue().get(i).getFullName()).append(", ");
+                    countSize = part.length();
+                }else
+                    break;
+            }
+            part.delete(countSize-1,countSize);
+            part.append("....");
+            textViewParticipant.setText(part.toString());
+        }catch (Exception ignored){}
+
     }
 
     @Override

@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.whosin.R;
 import com.example.whosin.model.ImageResources;
-import com.example.whosin.model.Listeners.DataLoadListener;
+import com.example.whosin.model.Listeners.GroupsLoadListener;
 import com.example.whosin.model.Listeners.UserMeetingsLoadListener;
 import com.example.whosin.model.MeetingToGroup;
 import com.example.whosin.model.Objects.User;
@@ -32,7 +32,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment implements DataLoadListener, UserMeetingsLoadListener {
+public class HomeFragment extends Fragment implements GroupsLoadListener, UserMeetingsLoadListener {
 
     private User thisUser;
     private GroupsAdapter groupAdapter;
