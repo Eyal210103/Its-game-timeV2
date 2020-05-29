@@ -191,9 +191,9 @@ public class GroupSettingsFragment extends Fragment implements GroupParticipants
         groupInfoViewModel.getParticipants().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
             public void onChanged(ArrayList<User> users) {
-                adapter = new ParticipantAdapter(users,getActivity());
-                participant.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+//                adapter = new ParticipantAdapter(users,getActivity());
+//                participant.setAdapter(adapter);
+//                adapter.notifyDataSetChanged();
             }
         });
     }
@@ -223,11 +223,8 @@ public class GroupSettingsFragment extends Fragment implements GroupParticipants
                                 MemberAdapter adapter = new MemberAdapter(getContext().getApplicationContext(), R.layout.adapter_members, users);
                                 listView.setAdapter(adapter);
                             }
-
                             @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
+                            public void onCancelled(@NonNull DatabaseError databaseError) { }
                         });
                     }
 

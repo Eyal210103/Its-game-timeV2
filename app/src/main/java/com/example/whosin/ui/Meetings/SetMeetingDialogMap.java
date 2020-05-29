@@ -1,8 +1,12 @@
 
 package com.example.whosin.ui.Meetings;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,12 +20,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.whosin.R;
-import com.example.whosin.model.GPSTracker;
 import com.example.whosin.model.Objects.ActiveMeeting;
 import com.example.whosin.model.Objects.Group;
 import com.example.whosin.model.Objects.User;
@@ -40,12 +44,15 @@ import com.sucho.placepicker.PlacePicker;
 public class SetMeetingDialogMap extends DialogFragment {
 
     private static final int PLACE_PICKER_CODE = 988;
+    private static final int REQUEST_LOCATION = 1;
 
 
     private Button submit;
     private MapView mapView;
     private GoogleMap mMap;
     private boolean isOpen;
+    private LocationManager locationManager;
+    private double latitude, longitude;
 
     private double lat;
     private double lon;
@@ -56,7 +63,11 @@ public class SetMeetingDialogMap extends DialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.dialod_set_meeting_map, container, false);
+        
+        ActivityCompat.requestPermissions( getActivity(), new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         mapView = root.findViewById(R.id.mapViewSetMeeting);
+        getLocation();
         final Bundle bundle =getArguments();
         final Group group = (Group)bundle.getSerializable("group");
         final User user = (User)bundle.getSerializable("user");
@@ -64,6 +75,7 @@ public class SetMeetingDialogMap extends DialogFragment {
         lon= 0;
         isOpen = false;
         date = (int[]) getArguments().getSerializable("date");
+
 
         Switch switchIs = root.findViewById(R.id.switch_allow_to_join);
         switchIs.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -125,9 +137,8 @@ public class SetMeetingDialogMap extends DialogFragment {
 
     private void onClickLocationSelect(){
         try {
-            GPSTracker gpsTracker = new GPSTracker(getActivity());
             Intent intent = new PlacePicker.IntentBuilder().onlyCoordinates(true)
-                    .setLatLong(gpsTracker.getLatitude(), gpsTracker.getLongitude())
+                    .setLatLong(latitude, longitude)
                     .setMarkerDrawable(R.drawable.find)
                     .setFabColor(R.color.colorSecondary)
                     .showLatLong(true)
@@ -162,6 +173,22 @@ public class SetMeetingDialogMap extends DialogFragment {
                 }
             }
         });
+    }
+
+    private void getLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        } else {
+            Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (locationGPS != null) {
+                double lat = locationGPS.getLatitude();
+                double longi = locationGPS.getLongitude();
+                latitude = lat;
+                longitude = longi;
+            }
+        }
     }
 
     @Override
