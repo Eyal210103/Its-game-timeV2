@@ -30,7 +30,7 @@ public class GroupMeetingsAdapter extends RecyclerView.Adapter<RecyclerView.View
     private  Group group;
 
     public GroupMeetingsAdapter(Context mContext, Fragment fragment, ArrayList<ActiveMeeting> meetings , Group group) {
-        this.meetings =meetings;
+        this.meetings = meetings;
         this.mContext = mContext;
         this.fragment = fragment;
         this.meetings = meetings;
@@ -149,6 +149,7 @@ public class GroupMeetingsAdapter extends RecyclerView.Adapter<RecyclerView.View
             return TYPE_OTHER;
         }
     }
+
 
     public static class MeetingsViewHolder extends RecyclerView.ViewHolder {
         public TextView textViewDay , textViewMonth , textViewHour;

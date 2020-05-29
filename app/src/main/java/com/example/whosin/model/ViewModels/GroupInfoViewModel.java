@@ -22,11 +22,12 @@ public class GroupInfoViewModel extends ViewModel {
     public void init (Fragment context, String id){
         this.context = context;
         this.group = FirebaseActions.getGroupById(id, context);
-        meetings = FirebaseActions.loadGroupMeetingswithHolder(context, id);
+        meetings = FirebaseActions.loadGroupMeetingsWithHolder(context, id);
 
     }
 
     public LiveData<ArrayList<ActiveMeeting>> getMeetings(){
+       // sort(meetings.getValue());
         return meetings;
     }
     public LiveData<Group> getGroup() {
@@ -39,4 +40,25 @@ public class GroupInfoViewModel extends ViewModel {
         return participants;
     }
 
+    private void sort(ArrayList<ActiveMeeting> meetings) {
+        ArrayList<ActiveMeeting> m = new ArrayList<ActiveMeeting>();
+        for (int i = 1; i <13; i++) {
+            ArrayList<ActiveMeeting> month = new ArrayList<ActiveMeeting>();
+            for (int j = 0; j < meetings.size(); j++) {
+                if (meetings.get(j).getMonth() == i){
+                    month.add(meetings.get(j));
+                    meetings.remove(j);
+                }
+            }
+            for (int j = 0; j < month.size(); j++) {
+                for (int k = 1; k < 32; k++) {
+                    if (month.get(j).getDay() == k){
+                        m.add(month.get(j));
+                        month.remove(j);
+                    }
+                }
+            }
+        }
+        this.meetings.setValue(m);
+    }
 }

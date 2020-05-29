@@ -21,6 +21,7 @@ import com.example.whosin.model.Singleton.CurrentUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -124,12 +125,13 @@ public class FirebaseActions {
         return g;
     }
 
-    public static MutableLiveData<ArrayList<ActiveMeeting>> loadGroupMeetingswithHolder(final Fragment context, String id) {
+    public static MutableLiveData<ArrayList<ActiveMeeting>> loadGroupMeetingsWithHolder(final Fragment context, String id) {
         final ArrayList<ActiveMeeting> meetings = new ArrayList<ActiveMeeting>();
         meetings.add(new ActiveMeeting());
         final MeetingsLoadListener meetingsLoadListener = (MeetingsLoadListener) context;
         MutableLiveData<ArrayList<ActiveMeeting>> m = new MutableLiveData<>();
-        database.getReference().child("Groups").child(id).child("ActiveMeeting").addValueEventListener(new ValueEventListener() {
+        Query query = database.getReference().child("Groups").child(id).child("ActiveMeeting");
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {

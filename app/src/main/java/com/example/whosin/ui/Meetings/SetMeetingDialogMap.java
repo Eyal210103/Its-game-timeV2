@@ -21,8 +21,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.whosin.R;
-import com.example.whosin.model.Objects.ActiveMeeting;
 import com.example.whosin.model.GPSTracker;
+import com.example.whosin.model.Objects.ActiveMeeting;
 import com.example.whosin.model.Objects.Group;
 import com.example.whosin.model.Objects.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -98,7 +98,7 @@ public class SetMeetingDialogMap extends DialogFragment {
                 meeting.setOpen(isOpen);
                 getDialog().dismiss();
 
-                DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Groups").child(group.getId()).child("ActiveMeeting").push();
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Groups").child(group.getId()).child("ActiveMeeting").child(""+meeting.getYear()+meeting.getMonth()+meeting.getDay()+meeting.getHour()+meeting.getMinute());
                 meeting.setId(reference.getKey());
                 reference.setValue(meeting);
 

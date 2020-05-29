@@ -121,6 +121,12 @@ public class GroupInfoFragment extends Fragment implements MeetingsLoadListener,
             }
         });
         updateUi();
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGroupSettings();
+            }
+        });
 
 
         ChatFragment chatFragment = new ChatFragment();
