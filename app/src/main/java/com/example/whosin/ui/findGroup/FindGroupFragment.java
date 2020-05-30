@@ -48,7 +48,7 @@ public class FindGroupFragment extends Fragment  implements GroupsLoadListener {
     private FindViewModel viewModel;
     private double latitude = 0;
     private double longitude = 0;
-
+    SeekBar seekBar;
     public FindGroupFragment() { }
 
     @Override
@@ -65,15 +65,14 @@ public class FindGroupFragment extends Fragment  implements GroupsLoadListener {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         this.mapView = root.findViewById(R.id.map_view);
 
+
         SharedPreferences googleBug = getActivity().getSharedPreferences("google_bug", Context.MODE_PRIVATE);
         if (!googleBug.contains("fixed")) {
             File corruptedZoomTables = new File(getActivity().getFilesDir(), "ZoomTables.data");
             corruptedZoomTables.delete();
             googleBug.edit().putBoolean("fixed", true).apply();
         }
-
-        initGoogleMap(savedInstanceState);
-        final SeekBar seekBar = (SeekBar) root.findViewById(R.id.seekBarZoom);
+        seekBar = (SeekBar) root.findViewById(R.id.seekBarZoom);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -99,7 +98,7 @@ public class FindGroupFragment extends Fragment  implements GroupsLoadListener {
                 onClickLocationSelect();
             }
         });
-
+        initGoogleMap(savedInstanceState);
         return root;
     }
 
@@ -107,8 +106,8 @@ public class FindGroupFragment extends Fragment  implements GroupsLoadListener {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == PLACE_PICKER_CODE){
             AddressData addressData = (AddressData) data.getParcelableExtra(Constants.ADDRESS_INTENT);
-            double lat = addressData.getLatitude();
-            double lon = addressData.getLongitude();
+            double lat = latitude;
+            double lon = longitude;
             LatLng loc = new LatLng(lat, lon);
             mMap.addMarker(new MarkerOptions().position(loc).title("Meeting Location"));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
@@ -149,6 +148,7 @@ public class FindGroupFragment extends Fragment  implements GroupsLoadListener {
 
     private void initGoogleMap(Bundle savedInstanceState) {
         mapView.onCreate(savedInstanceState);
+        getLocation();
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -157,6 +157,9 @@ public class FindGroupFragment extends Fragment  implements GroupsLoadListener {
                     googleMap.setMyLocationEnabled(true);
                     googleMap.setBuildingsEnabled(true);
                     googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(latitude,longitude)));
+                    mMap.moveCamera(CameraUpdateFactory.zoomTo(10f));
+                    seekBar.setProgress((int) (mMap.getCameraPosition().zoom*5));
                 } else {
                     Toast.makeText(getActivity(), "Map Error", Toast.LENGTH_LONG).show();
                 }

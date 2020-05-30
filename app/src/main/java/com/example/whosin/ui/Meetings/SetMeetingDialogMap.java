@@ -59,6 +59,7 @@ public class SetMeetingDialogMap extends DialogFragment {
 
     private int[] date;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -119,7 +120,6 @@ public class SetMeetingDialogMap extends DialogFragment {
 
                 MeetingInfoFragment nextFrag = new MeetingInfoFragment();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("user", user);
                 bundle.putSerializable("group" , group);
                 bundle.putSerializable("meeting" ,meeting);
                 nextFrag.setArguments(bundle);
