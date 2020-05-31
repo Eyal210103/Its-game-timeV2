@@ -7,21 +7,21 @@
     android:layout_height="match_parent">
 
     <DatePicker
+        android:theme="@style/Calender"
         android:id="@+id/calendarView"
         android:layout_width="350dp"
         android:layout_height="351dp"
-        android:background="@color/ic_launcher_background"
+        android:background="@color/background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TimePicker
+        android:theme="@style/Clock"
         android:id="@+id/timepicker"
         android:layout_width="350dp"
         android:layout_height="374dp"
-        android:headerBackground="@color/colorAccent"
-        android:numbersSelectorColor="@color/colorAccent"
-        android:background="@color/ic_launcher_background"
+        android:background="@color/background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
