@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TimePicker
-        android:theme="@style/Clock"
+        android:theme="@style/clockstyle"
         android:id="@+id/timepicker"
         android:layout_width="350dp"
         android:layout_height="374dp"

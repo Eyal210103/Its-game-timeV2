@@ -13,7 +13,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Calender" parent="Theme.AppCompat.Light">
+    <style name="Calender" >
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlActivated">@color/blue</item>
         <item name="android:selectableItemBackgroundBorderless">@color/background</item>
@@ -22,12 +22,12 @@
         <item name="colorControlHighlight">@color/oppBackground</item>
     </style>
 
-    <style name="Clock" parent="Theme.AppCompat.Light">
+    <style name="clockstyle">
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlActivated">@color/blue</item>
-        <item name="android:selectableItemBackgroundBorderless">#393939</item>
-        <item name="android:textColorPrimary">#494949</item> <!--days of the month-->
-        <item name="android:textColorSecondary">@color/oppBackground</item> <!--days of the month-->
+        <item name="android:selectableItemBackgroundBorderless">@color/dark</item>
+        <item name="android:textColorPrimary">@color/dark</item>
+        <item name="android:textColorSecondary">@color/oppBackground</item>
         <item name="colorControlHighlight">@color/oppBackground</item>
     </style>
 

@@ -11,6 +11,7 @@
     <color name="toolbar">#C3C3C3</color>
     <color name="background">#FFFFFF</color>
     <color name="oppBackground">#494949</color>
+    <color name="dark">#393939</color>
 </resources>
 
 
